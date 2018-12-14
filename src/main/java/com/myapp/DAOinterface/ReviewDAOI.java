@@ -1,4 +1,4 @@
 package com.myapp.DAOinterface;
 
-public interface CartDAOI {
+public interface ReviewDAOI {
 }
