@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface UserDAOI {
     enum SQL {
-   //     INSERT_USER("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)"),       //8 items
+        INSERT_USER("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)"),       //8 items
         UPDATE_USER_BY_ID("UPDATE users SET name=:name, email=:email, password=:password, role_id=:roleId, " +
                 "address=:address, phone=:phone, birthday=:birthday WHERE user_id=:userId"),
         GET_USER_BY_ID("SELECT * FROM users WHERE user_id = ?"),

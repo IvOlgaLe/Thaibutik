@@ -1,9 +1,9 @@
 package com.myapp.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class User extends BaseEntity{
-    private int userId;
     private String name;
     private String email;
     private String password;
@@ -15,8 +15,7 @@ public class User extends BaseEntity{
     public User() {
     }
 
-    public User(int userId, String name, String email, String password, int roleId, String address, String phone, Date birthday) {
-        this.userId = userId;
+    public User(String name, String email, String password, int roleId, String address, String phone, Date birthday) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -26,12 +25,15 @@ public class User extends BaseEntity{
         this.birthday = birthday;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public User(int id, String name, String email, String password, int roleId, String address, String phone, Date birthday) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roleId = roleId;
+        this.address = address;
+        this.phone = phone;
+        this.birthday = birthday;
     }
 
     public String getName() {
@@ -88,5 +90,26 @@ public class User extends BaseEntity{
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return getId() == user.getId() &&
+                getRoleId() == user.getRoleId() &&
+                Objects.equals(getName(), user.getName()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getAddress(), user.getAddress()) &&
+                Objects.equals(getPhone(), user.getPhone()) &&
+                Objects.equals(getBirthday(), user.getBirthday());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getName(), getEmail(), getPassword(), getRoleId(), getAddress(), getPhone(), getBirthday());
     }
 }

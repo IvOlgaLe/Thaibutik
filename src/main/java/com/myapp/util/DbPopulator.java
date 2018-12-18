@@ -13,7 +13,7 @@ public class DbPopulator extends ResourceDatabasePopulator {
     private final DataSource dataSource;
 
     public DbPopulator(String scriptLocation, DataSource dataSource) {
-        super(RESOURCE_LOADER.getResource(scriptLocation));
+      //  super(RESOURCE_LOADER.getResource(scriptLocation));
         this.dataSource = dataSource;
     }
 

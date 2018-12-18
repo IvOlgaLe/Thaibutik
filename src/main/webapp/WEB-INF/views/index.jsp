@@ -8,7 +8,7 @@
 <body>
     <h1>Welcome to the Simple Application</h1>
     <div class="container">
-        <form:form action="userInfo" method="POST" modelAttribute="userkey">
+        <form:form action="userInfo" method="POST">
             <div class="sub_field">
                 <label for="username">User Name</label>
                 <form:input type="text" id="username" path="name"/>
