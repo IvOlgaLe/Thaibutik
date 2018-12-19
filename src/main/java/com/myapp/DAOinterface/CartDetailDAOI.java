@@ -8,12 +8,12 @@ import java.util.Map;
 public interface CartDetailDAOI {
     enum SQL {
         UPDATE_CDETAIL_BY_ID("UPDATE cart_detail SET cart_id=:cart_id, item_id=:item_id, " +
-                "quantity=:quantity WHERE id=:id"),
+                "quantity=:quantity WHERE cart_id=:cart_id AND item_id=:item_id"),
         GET_ALL_CDETAILS("SELECT * FROM cart_detail"),
         GET_CDETAIL_BY_ID("SELECT * FROM cart_detail WHERE id = ?"),
         GET_CDETAIL_BY_CART_ID("SELECT * FROM cart_detail WHERE cart_id = ?"),
         GET_CDETAIL_BY_ITEM_ID("SELECT * FROM cart_detail WHERE item_id = ?"),
-        DELETE_CDETAIL_BY_ID("DELETE FROM cart_detail WHERE id = ?");
+        DELETE_CDETAIL_BY_ID("DELETE FROM cart_detail WHERE cart_id = ? AND item_id = ?");
 
         private final String query;
 
@@ -28,9 +28,9 @@ public interface CartDetailDAOI {
 
     CartDetail saveCartDetail(CartDetail cart_detail);
 
-    boolean deleteCartDetailById(int id);
+    boolean deleteCartDetailById(int cartId, int itemId);
 
-    CartDetail getCartDetailById(int id);
+    CartDetail getCartDetailById(int cartId, int itemId);
 
     List<CartDetail> getCartDetailByCartId(int CartId);
 

@@ -1,6 +1,6 @@
 package com.myapp.model;
 
-public class Loves extends BaseEntity{
+public class Loves{
     private User user;
     private Product product;
 
@@ -8,8 +8,7 @@ public class Loves extends BaseEntity{
 
     }
 
-    public Loves(Integer id, User user, Product product) {
-        super(id);
+    public Loves(User user, Product product) {
         this.user = user;
         this.product = product;
     }

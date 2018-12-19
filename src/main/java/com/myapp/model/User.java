@@ -118,18 +118,18 @@ public class User extends BaseEntity {
         if (!(o instanceof User)) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return getId() == user.getId() &&
-                getRole() == user.getRole() &&
+        return Objects.equals(getId(), user.getId()) &&
                 Objects.equals(getName(), user.getName()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getAddress(), user.getAddress()) &&
-                Objects.equals(getPhone(), user.getPhone()) &&
-                Objects.equals(getBirthday(), user.getBirthday());
+                Objects.equals(getRole(), user.getRole()) &&
+                (Objects.equals(getAddress(), user.getAddress()) || (getAddress() == null && user.getAddress() == null)) &&
+                (Objects.equals(getPhone(), user.getPhone()) || (getAddress() == null && user.getAddress() == null)) &&
+                (Objects.equals(getBirthday(), user.getBirthday()) || (getAddress() == null && user.getAddress() == null));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), getName(), getEmail(), getPassword(), getRole(), getAddress(), getPhone(), getBirthday());
+        return Objects.hash(super.hashCode(), getName(), getEmail(), getPassword(), getConfirmedPassword(), getRole(), getAddress(), getPhone(), getBirthday());
     }
 }

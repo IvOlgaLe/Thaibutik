@@ -26,8 +26,7 @@ public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
     @Autowired
     public CartDetailDAO(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertCartDetail = new SimpleJdbcInsert(dataSource)
-                .withTableName("cart_detail")
-                .usingGeneratedKeyColumns("id");
+                .withTableName("cart_detail");
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -36,29 +35,27 @@ public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
     @Override
     public CartDetail saveCartDetail(CartDetail cartDetail) {
         MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", cartDetail.getId())
                 .addValue("cart_id", cartDetail.getCart().getId())
                 .addValue("item_id", cartDetail.getItem().getId())
                 .addValue("quantity", cartDetail.getQuantity())
                 ;
 
-        if (cartDetail.isNew()) {
-            Number newKey = insertCartDetail.executeAndReturnKey(map);
-            cartDetail.setId(newKey.intValue());
+        if (getCartDetailById(cartDetail.getCart().getId(), cartDetail.getItem().getId()) == null) {
+            insertCartDetail.execute(map);
         } else {
-            namedParameterJdbcTemplate.update(SQL.UPDATE_CDETAIL_BY_ID.getQuery(), map);
+            namedParameterJdbcTemplate.update(CartDetailDAOI.SQL.UPDATE_CDETAIL_BY_ID.getQuery(), map);
         }
         return cartDetail;
     }
 
     @Override
-    public boolean deleteCartDetailById(int id) {
-        return jdbcTemplate.update(SQL.DELETE_CDETAIL_BY_ID.getQuery(), id) != 0;
+    public boolean deleteCartDetailById(int cartId, int itemId) {
+        return jdbcTemplate.update(SQL.DELETE_CDETAIL_BY_ID.getQuery(), cartId, itemId) != 0;
     }
 
     @Override
-    public CartDetail getCartDetailById(int id) {
-        List<CartDetail> cartDetails = jdbcTemplate.query(SQL.GET_CDETAIL_BY_ID.getQuery(), ROW_MAPPER, id);
+    public CartDetail getCartDetailById(int cartId, int itemId) {
+        List<CartDetail> cartDetails = jdbcTemplate.query(SQL.GET_CDETAIL_BY_ID.getQuery(), ROW_MAPPER, cartId, itemId);
         return DataAccessUtils.singleResult(cartDetails);
     }
 

@@ -12,8 +12,10 @@ public interface ProductDAOI {
         GET_ALL_PRODUCTS("SELECT * FROM product"),
         GET_PRODUCT_BY_ID("SELECT * FROM product WHERE id = ?"),
         GET_PRODUCT_BY_NAME("SELECT * FROM product WHERE name = ?"),
-        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE id = ?")
-        ;
+        GET_PRODUCT_BY_CATEGORY_ID("SELECT * FROM product p " +
+                "JOIN category_product cp ON p.id = cp.product_id" +
+                "WHERE cp.category_id = ?"),
+        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE id = ?");
 
         private final String query;
 
@@ -33,6 +35,9 @@ public interface ProductDAOI {
     Product getProductById(int id);
 
     List<Product> getProductByName(String name);
+
+
+    List<Product> getProductByCategoryId(int catId);
 
     List<Product> getProductsByParam(Map<String, String> param);
 

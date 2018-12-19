@@ -1,14 +1,13 @@
 package com.myapp.model;
 
-public class CartDetail extends BaseEntity{
+public class CartDetail{
     private Cart cart;
     private Item item;
     private int quantity;
 
     public CartDetail() {}
 
-    public CartDetail(Integer id, Cart cart, Item item, int quantity) {
-        super(id);
+    public CartDetail(Cart cart, Item item, int quantity) {
         this.cart = cart;
         this.item = item;
         this.quantity = quantity;

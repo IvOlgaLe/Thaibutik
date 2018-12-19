@@ -6,13 +6,12 @@
 
     <context:property-placeholder location="classpath:db.properties" system-properties-mode="OVERRIDE"/>
 
-    <bean class="com.myapp.util.DbPopulator">
+    <bean id="dbPopulator" class="com.myapp.util.DbPopulator">
         <constructor-arg name="scriptLocation" value="classpath:populateDB.sql"/>
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="dataSource"
-          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${driver}"/>
         <property name="url" value="${url}"/>
         <property name="username" value="${user}"/>

@@ -71,6 +71,11 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
     }
 
     @Override
+    public List<Product> getProductByCategoryId(int catId) {
+        return  jdbcTemplate.query(SQL.GET_PRODUCT_BY_CATEGORY_ID.getQuery(), ROW_MAPPER, catId);
+    }
+
+    @Override
     public List<Product> getProductsByParam(Map<String, String> param) {
         return null;
     }

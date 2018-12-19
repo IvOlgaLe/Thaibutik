@@ -1,31 +1,7 @@
-DROP TABLE review;
-DROP TABLE loves;
-DROP TABLE order_detail;
-DROP TABLE orders;
-DROP TABLE cart_detail;
-DROP TABLE cart;
-DROP TABLE category_product;
-DROP TABLE order_state;
-DROP TABLE product_lng;
-DROP TABLE item;
-DROP TABLE product;
-DROP TABLE brand;
-DROP TABLE category;
-DROP TABLE currency;
-DROP TABLE users;
-DROP TABLE locale;
-DROP TABLE role;
-
 CREATE TABLE role (
   id   NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
   name VARCHAR2(255)                                                      NOT NULL,
   CONSTRAINT pk_role PRIMARY KEY (id)
-);
-
-CREATE TABLE locale (
-  id   NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
-  name VARCHAR2(15)                                                       NOT NULL,
-  CONSTRAINT pk_locale PRIMARY KEY (id)
 );
 
 CREATE TABLE currency (
@@ -89,16 +65,6 @@ CREATE TABLE item (
   CONSTRAINT fk_item_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
 
-CREATE TABLE product_lng (
-  product_id  NUMERIC       NOT NULL,
-  locale_id   NUMERIC       NOT NULL,
-  name        VARCHAR2(255) NOT NULL,
-  description VARCHAR2(1023),
-  CONSTRAINT pk_productlng PRIMARY KEY (product_id, locale_id),
-  CONSTRAINT fk_prodlng_prod FOREIGN KEY (product_id) REFERENCES product (id),
-  CONSTRAINT fk_prod_locale FOREIGN KEY (locale_id) REFERENCES locale (id)
-);
-
 CREATE TABLE order_state (
   id   NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
   name VARCHAR2(255),
@@ -121,42 +87,39 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE order_detail (
-  id      NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
-  order_id NUMERIC      NOT NULL,
-  item_id  NUMERIC      NOT NULL,
-  quantity NUMERIC,
-  price    NUMBER(5, 2) NOT NULL,
-  currency_id   NUMERIC                                                                NOT NULL,
-  discount NUMBER(5, 2),
+  order_id    NUMERIC                                                                   NOT NULL,
+  item_id     NUMERIC                                                                   NOT NULL,
+  quantity    NUMERIC,
+  price       NUMBER(5, 2)                                                              NOT NULL,
+  currency_id NUMERIC                                                                   NOT NULL,
+  discount    NUMBER(5, 2),
   CONSTRAINT pk_ordersdet PRIMARY KEY (order_id, item_id),
   CONSTRAINT fk_ordersdet_order FOREIGN KEY (order_id) REFERENCES orders (id),
   CONSTRAINT fk_ordersdet_item FOREIGN KEY (item_id) REFERENCES item (id),
-    CONSTRAINT fk_ordersdet_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
+  CONSTRAINT fk_ordersdet_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
 
 CREATE TABLE cart (
-  id      NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
-  user_id NUMERIC,
-  total_price    NUMBER(5, 2) NOT NULL,
-  currency_id   NUMERIC                                                                NOT NULL,
-  cart_date     DATE                                                                  NOT NULL,
+  id          NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
+  user_id     NUMERIC,
+  total_price NUMBER(5, 2)                                                              NOT NULL,
+  currency_id NUMERIC                                                                   NOT NULL,
+  cart_date   DATE                                                                      NOT NULL,
   CONSTRAINT pk_cart PRIMARY KEY (id),
   CONSTRAINT fk_cart_user FOREIGN KEY (user_id) REFERENCES users (id),
-      CONSTRAINT fk_cart_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
+  CONSTRAINT fk_cart_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
 
 CREATE TABLE cart_detail (
-  id      NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
-  cart_id  NUMERIC NOT NULL,
-  item_id  NUMERIC NOT NULL,
-  quantity NUMERIC NOT NULL,
+  cart_id  NUMERIC                                                                   NOT NULL,
+  item_id  NUMERIC                                                                   NOT NULL,
+  quantity NUMERIC                                                                   NOT NULL,
   CONSTRAINT pk_cartdet PRIMARY KEY (cart_id, item_id),
   CONSTRAINT fk_cartdet_cart FOREIGN KEY (cart_id) REFERENCES cart (id),
   CONSTRAINT fk_cartdet_item FOREIGN KEY (item_id) REFERENCES item (id)
 );
 
 CREATE TABLE category_product (
-  id      NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
   product_id  NUMERIC,
   category_id NUMERIC,
   CONSTRAINT pk_cp PRIMARY KEY (product_id, category_id),
@@ -165,9 +128,8 @@ CREATE TABLE category_product (
 );
 
 CREATE TABLE loves (
-  id      NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10000 INCREMENT BY 1)    NOT NULL,
-  user_id    NUMERIC NOT NULL,
-  product_id NUMERIC NOT NULL,
+  user_id    NUMERIC                                                                   NOT NULL,
+  product_id NUMERIC                                                                   NOT NULL,
   CONSTRAINT pk_loves PRIMARY KEY (user_id, product_id),
   CONSTRAINT fk_loves_user FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_loves_product FOREIGN KEY (product_id) REFERENCES product (id)

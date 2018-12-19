@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
-public class OrderDetailDAO  extends BaseDAO implements OrderDetailDAOI {
+public class OrderDetailDAO extends BaseDAO implements OrderDetailDAOI {
     private static final BeanPropertyRowMapper<OrderDetail> ROW_MAPPER = BeanPropertyRowMapper.newInstance(OrderDetail.class);
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,8 +26,7 @@ public class OrderDetailDAO  extends BaseDAO implements OrderDetailDAOI {
     @Autowired
     public OrderDetailDAO(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertOrderDetail = new SimpleJdbcInsert(dataSource)
-                .withTableName("order_detail")
-                .usingGeneratedKeyColumns("id");
+                .withTableName("order_detail");
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -36,18 +35,15 @@ public class OrderDetailDAO  extends BaseDAO implements OrderDetailDAOI {
     @Override
     public OrderDetail saveOrderDetail(OrderDetail orderDetail) {
         MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", orderDetail.getId())
                 .addValue("order_id", orderDetail.getOrder().getId())
                 .addValue("item_id", orderDetail.getItem().getId())
                 .addValue("price", orderDetail.getPrice())
                 .addValue("quantity", orderDetail.getQuantity())
                 .addValue("currency_id", orderDetail.getCurrency().getId())
-                .addValue("discount", orderDetail.getDiscount())
-                ;
+                .addValue("discount", orderDetail.getDiscount());
 
-        if (orderDetail.isNew()) {
-            Number newKey = insertOrderDetail.executeAndReturnKey(map);
-            orderDetail.setId(newKey.intValue());
+        if (getOrderDetailById(orderDetail.getOrder().getId(), orderDetail.getItem().getId()) == null) {
+            insertOrderDetail.execute(map);
         } else {
             namedParameterJdbcTemplate.update(OrderDetailDAOI.SQL.UPDATE_ODETAIL_BY_ID.getQuery(), map);
         }
@@ -55,19 +51,19 @@ public class OrderDetailDAO  extends BaseDAO implements OrderDetailDAOI {
     }
 
     @Override
-    public boolean deleteOrderDetailById(int id) {
-        return jdbcTemplate.update(OrderDetailDAOI.SQL.DELETE_ODETAIL_BY_ID.getQuery(), id) != 0;
+    public boolean deleteOrderDetailById(int orderId, int itemId) {
+        return jdbcTemplate.update(OrderDetailDAOI.SQL.DELETE_ODETAIL_BY_ID.getQuery(), orderId, itemId) != 0;
     }
 
     @Override
-    public OrderDetail getOrderDetailById(int id) {
-        List<OrderDetail> orderDetails = jdbcTemplate.query(OrderDetailDAOI.SQL.GET_ODETAIL_BY_ID.getQuery(), ROW_MAPPER, id);
-        return DataAccessUtils.singleResult(orderDetails);
+    public OrderDetail getOrderDetailById(int orderId, int itemId) {
+        List<OrderDetail> oDetails = jdbcTemplate.query(OrderDetailDAOI.SQL.GET_ODETAIL_BY_ITEM_ID.getQuery(), ROW_MAPPER, orderId, itemId);
+        return DataAccessUtils.singleResult(oDetails);
     }
 
     @Override
     public List<OrderDetail> getOrderDetailByOrderId(int orderId) {
-            return jdbcTemplate.query(OrderDetailDAOI.SQL.GET_ODETAIL_BY_ITEM_ID.getQuery(), ROW_MAPPER, orderId);
+        return jdbcTemplate.query(OrderDetailDAOI.SQL.GET_ODETAIL_BY_ORDER_ID.getQuery(), ROW_MAPPER, orderId);
     }
 
     @Override

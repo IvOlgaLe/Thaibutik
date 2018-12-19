@@ -1,13 +1,9 @@
 package com.myapp.service;
 
-import com.myapp.DAO.RoleDAO;
 import com.myapp.DAO.UserDAO;
 import com.myapp.model.Role;
 import com.myapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

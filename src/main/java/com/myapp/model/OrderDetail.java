@@ -2,7 +2,7 @@ package com.myapp.model;
 
 import java.math.BigDecimal;
 
-public class OrderDetail extends BaseEntity{
+public class OrderDetail{
     private Order order;
     private Item item;
     private int	quantity;
@@ -14,8 +14,7 @@ public class OrderDetail extends BaseEntity{
 
     }
 
-    public OrderDetail(Integer id, Order order, Item item, int quantity, BigDecimal price, Currency currency, double discount) {
-        super(id);
+    public OrderDetail(Order order, Item item, int quantity, BigDecimal price, Currency currency, double discount) {
         this.order = order;
         this.item = item;
         this.quantity = quantity;
