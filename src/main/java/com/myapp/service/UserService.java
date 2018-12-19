@@ -1,6 +1,8 @@
 package com.myapp.service;
 
+import com.myapp.DAO.RoleDAO;
 import com.myapp.DAO.UserDAO;
+import com.myapp.model.Role;
 import com.myapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +23,9 @@ public class UserService {
         return userDAO.saveUser(user);
     }
 
-    public User updateUser(User user) {
-        return userDAO.updateUser(user);
+    public boolean setRole(User user, Role role) {
+        user.setRole(role);
+        return true;
     }
 
     public boolean deleteUserById(int userId) {
@@ -48,4 +51,6 @@ public class UserService {
     public User validateUser(String email, String inputPassword) {
         return userDAO.validateUser(email, inputPassword);
     }
+
+
 }

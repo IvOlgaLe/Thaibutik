@@ -1,14 +1,18 @@
 package com.myapp.DAOinterface;
 
+import com.myapp.model.Product;
+
+import java.util.List;
+import java.util.Map;
+
 public interface ProductDAOI {
     enum SQL {
-        INSERT_PRODUCT("INSERT INTO product VALUES (?, ?, ?, ?, ?)"),       //5 items
-        UPDATE_PRODUCT_BY_ID("UPDATE users SET name=:name, email=:email, password=:password, role_id=:roleId, " +
-                "address=:address, phone=:phone, birthday=:birthday WHERE user_id=:userId"),
-        GET_PRODUCT_BY_ID("SELECT * FROM users WHERE user_id = ?"),
-        GET_PRODUCT_BY_BRANDID("SELECT * FROM product WHERE brand_id = ?"),
+        UPDATE_PRODUCT_BY_ID("UPDATE product SET name=:name, brand_id=:brand_id, image_source=:image_source," +
+                "description:=description WHERE id=:id"),
         GET_ALL_PRODUCTS("SELECT * FROM product"),
-        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE product_id = ?")
+        GET_PRODUCT_BY_ID("SELECT * FROM product WHERE id = ?"),
+        GET_PRODUCT_BY_NAME("SELECT * FROM product WHERE name = ?"),
+        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE id = ?")
         ;
 
         private final String query;
@@ -21,4 +25,16 @@ public interface ProductDAOI {
             return query;
         }
     }
+
+    Product saveProduct(Product product);
+
+    boolean deleteProductById(int id);
+
+    Product getProductById(int id);
+
+    List<Product> getProductByName(String name);
+
+    List<Product> getProductsByParam(Map<String, String> param);
+
+    List<Product> getAllProducts();
 }

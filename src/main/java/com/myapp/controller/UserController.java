@@ -1,10 +1,15 @@
 package com.myapp.controller;
 
+import com.myapp.enums.Constants;
+import com.myapp.model.Role;
 import com.myapp.model.User;
+import com.myapp.service.RoleService;
 import com.myapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class UserController extends BaseController {
@@ -20,17 +26,17 @@ public class UserController extends BaseController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RoleService roleService;
 /*
-	@Autowired
-	RoleService roleService;
-	
 	@Autowired
 	OrderService orderService;*/
 
     @Autowired
     MessageSource message;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login(@ModelAttribute("user") User user) {
         return "login";
     }
@@ -43,7 +49,7 @@ public class UserController extends BaseController {
         String password = request.getParameter("password");
 
         User user = userService.validateUser(email, password);
-        if (user != null && user.getRoleId() == 1) {
+        if (user != null) {
             session.setAttribute("user", user);
         } else {
             pageName = "errorPage";
@@ -56,12 +62,21 @@ public class UserController extends BaseController {
         return new ModelAndView("register", "user", user);
     }
 
-//	@Transactional
-	/*@RequestMapping(value="processRegister", method = RequestMethod.POST)
-	public ModelAndView doRegister(@ModelAttribute("user") @Valid User user, BindingResult result, @RequestParam("id") int id, HttpServletRequest request) {
-		userService.addRole(user, roleService.getRoleIdByName(RoleEnum.ROLE_USER));
-		
+
+	@Transactional
+	@RequestMapping(value="processRegister", method = RequestMethod.POST)
+	public ModelAndView processRegister(@ModelAttribute("user") @Valid User user, BindingResult result, HttpServletRequest request) {
 		if (!result.hasErrors()) {
+            Role role = roleService.getRoleByName(Constants.ROLE_USER);
+            if (role != null) {
+                user.setRole(role);
+                userService.saveUser(user);
+                return new ModelAndView("registerSuccess", "user", user);
+            }  return new ModelAndView("errorPage");
+        } else {
+            return new ModelAndView("register");
+        }
+/*
 			if (id == 0)  {
 				ModelAndView model = new ModelAndView("register");
 				if (user.getName() == null || "".equals(user.getName())) model.addObject("msg", message.getMessage("account.error.empty.username", null, getLocale()));
@@ -87,9 +102,9 @@ public class UserController extends BaseController {
 				}
 				return register(user);
 			} 
-			return accountEdit().addObject("msg", message.getMessage("account.error.notsuccess", null, getLocale()));
-		}
-	}*/
+			return accountEdit().addObject("msg", message.getMessage("account.error.notsuccess", null, getLocale()));*/
+
+	}
 	
 /*	@RequestMapping(value="account_table", method = RequestMethod.GET)
 	public ModelAndView customer_table() {

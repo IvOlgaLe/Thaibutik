@@ -1,13 +1,25 @@
 package com.myapp.model;
 
+import com.myapp.customAnnotation.EqualFields;
+import com.myapp.customAnnotation.PasswordConstraint;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.Objects;
 
-public class User extends BaseEntity{
+@EqualFields(baseField = "password", matchField = "confirmedPassword", message = "Password doesn't match")
+public class User extends BaseEntity {
+    @NotBlank(message = "Please, enter your name")
     private String name;
+
+    @Email(message = "Enter correct email")
     private String email;
+
+    @PasswordConstraint
     private String password;
-    private int roleId;
+    private String confirmedPassword;
+    private Role role;
     private String address;
     private String phone;
     private Date birthday;
@@ -15,22 +27,22 @@ public class User extends BaseEntity{
     public User() {
     }
 
-    public User(String name, String email, String password, int roleId, String address, String phone, Date birthday) {
+    public User(String name, String email, String password, Role role, String address, String phone, Date birthday) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roleId = roleId;
+        this.role = role;
         this.address = address;
         this.phone = phone;
         this.birthday = birthday;
     }
 
-    public User(int id, String name, String email, String password, int roleId, String address, String phone, Date birthday) {
+    public User(int id, String name, String email, String password, Role role, String address, String phone, Date birthday) {
         super(id);
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roleId = roleId;
+        this.role = role;
         this.address = address;
         this.phone = phone;
         this.birthday = birthday;
@@ -60,12 +72,12 @@ public class User extends BaseEntity{
         this.password = password;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getAddress() {
@@ -92,6 +104,14 @@ public class User extends BaseEntity{
         this.birthday = birthday;
     }
 
+    public String getConfirmedPassword() {
+        return confirmedPassword;
+    }
+
+    public void setConfirmedPassword(String confirmedPassword) {
+        this.confirmedPassword = confirmedPassword;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,7 +119,7 @@ public class User extends BaseEntity{
         if (!super.equals(o)) return false;
         User user = (User) o;
         return getId() == user.getId() &&
-                getRoleId() == user.getRoleId() &&
+                getRole() == user.getRole() &&
                 Objects.equals(getName(), user.getName()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
@@ -110,6 +130,6 @@ public class User extends BaseEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), getName(), getEmail(), getPassword(), getRoleId(), getAddress(), getPhone(), getBirthday());
+        return Objects.hash(super.hashCode(), getId(), getName(), getEmail(), getPassword(), getRole(), getAddress(), getPhone(), getBirthday());
     }
 }

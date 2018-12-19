@@ -7,13 +7,14 @@ import java.util.Map;
 
 public interface UserDAOI {
     enum SQL {
-        INSERT_USER("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)"),       //8 items
-        UPDATE_USER_BY_ID("UPDATE users SET name=:name, email=:email, password=:password, role_id=:roleId, " +
-                "address=:address, phone=:phone, birthday=:birthday WHERE user_id=:userId"),
-        GET_USER_BY_ID("SELECT * FROM users WHERE user_id = ?"),
+/*        INSERT_USER("INSERT INTO users(name, email, password, role_id, address, phone, birthday)" +
+                "VALUES (:name, :email, :password, :roleId, :address, :phone, :birthday)"),       //7 items*/
+        UPDATE_USER_BY_ID("UPDATE users SET name=:name, email=:email, password=:password, role_id=:role_id, " +
+                "address=:address, phone=:phone, birthday=:birthday WHERE id=:id"),
+        GET_USER_BY_ID("SELECT * FROM users WHERE id = ?"),
         GET_USER_BY_EMAIL("SELECT * FROM users WHERE email = ?"),
         GET_ALL_USERS("SELECT * FROM users"),
-        DELETE_USER_BY_ID("DELETE FROM users WHERE user_id = ?")
+        DELETE_USER_BY_ID("DELETE FROM users WHERE id = ?")
         ;
 
         private final String query;
@@ -29,11 +30,9 @@ public interface UserDAOI {
 
     User saveUser(User user);
 
-    User updateUser(User user);
+    boolean deleteUserById(int id);
 
-    boolean deleteUserById(int userId);
-
-    User getUserById(int userId);
+    User getUserById(int id);
 
     User getUserByEmail(String email);
 

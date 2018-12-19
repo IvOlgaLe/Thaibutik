@@ -8,25 +8,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
-
 @ContextConfiguration({
-        "classpath:spring-app.xml",
-        "classpath:spring-db.xml"
+        "classpath:resources/spring-app.xml",
+        "classpath:spring/spring-db.xml"
 })
-
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserDAOTest {
-/*    @Deployment
-    public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-                .addClass(UserDAO.class)
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-    }*/
+public class UserServiceTest {
+
+    static {
+        SLF4JBridgeHandler.install();
+    }
 
     @Autowired
     private UserService userService;
@@ -36,7 +32,7 @@ public class UserDAOTest {
 
     @Before
     public void setUp() throws Exception {
- //       dbPopulator.execute();
+        dbPopulator.execute();
     }
 
     @After
@@ -45,7 +41,7 @@ public class UserDAOTest {
 
     @Test
     public void testSaveUser() {
-        User userExp = new User("Emma Save", "emma@gmail.com", "110", 3, "65 Central St, Brooklyn, NY, 11256", "212-159-2516", null);
+        User userExp = new User("Emma Save", "emma@gmail.com", "110", new Role(1, "ROLE_USER"), "65 Central St, Brooklyn, NY, 11256", "212-159-2516", null);
         User userAct = userService.saveUser(userExp);
         assert (userAct.equals(userExp));
     }
