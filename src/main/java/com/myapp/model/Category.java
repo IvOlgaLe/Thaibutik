@@ -1,21 +1,20 @@
 package com.myapp.model;
 
-import java.util.List;
-
 public class Category extends BaseEntity{
     private String	name;
     private String	description;
-    private List<Product> productList;
 
     public Category() {
 
     }
-
-    public Category(Integer id, String name, String description, List<Product> productList) {
+    public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+    public Category(Integer id, String name, String description) {
         super(id);
         this.name = name;
         this.description = description;
-        this.productList=productList;
     }
 
     public String getName() {
@@ -32,13 +31,5 @@ public class Category extends BaseEntity{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
     }
 }

@@ -1,5 +1,8 @@
 package com.myapp.controller;
 
+import com.myapp.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -9,9 +12,13 @@ import java.util.List;
 import java.util.Locale;
 
 @ImportResource("classpath:spring-db.xml")
+//@DependsOn("dbPopulator")
 public abstract class BaseController {
-	private Locale locale;
+	//private Locale locale;
 	public static List<Locale.Category> categoryList;
+
+/*	@Autowired
+	CacheManager cacheManager;*/
 /*
 	@Autowired
 	CategoryService productTypeService;

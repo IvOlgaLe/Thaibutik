@@ -1,4 +1,4 @@
-<%@include file="header.jsp"%>
+<%@include file="../links_top.jsp"%>
 <ct:header></ct:header>
 <ct:body>
 	<div class="container">
@@ -12,6 +12,12 @@
 							</div>
 							<div class="col-xs-6">
 								<a href="register">Register</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="goods_compare">Good compare</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="index">Main Page</a>
 							</div>
 						</div>
 						<hr>

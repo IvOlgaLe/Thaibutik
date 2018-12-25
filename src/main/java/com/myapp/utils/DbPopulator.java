@@ -1,4 +1,4 @@
-package com.myapp.util;
+package com.myapp.utils;
 
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;

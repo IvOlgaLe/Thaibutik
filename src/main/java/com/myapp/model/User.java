@@ -1,7 +1,9 @@
 package com.myapp.model;
 
+import com.myapp.customAnnotation.DateConstraint;
 import com.myapp.customAnnotation.EqualFields;
 import com.myapp.customAnnotation.PasswordConstraint;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Email;
@@ -19,30 +21,33 @@ public class User extends BaseEntity {
     @PasswordConstraint
     private String password;
     private String confirmedPassword;
-    private Role role;
+    private int roleId;
     private String address;
     private String phone;
+
+ //   @DateConstraint
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     public User() {
     }
 
-    public User(String name, String email, String password, Role role, String address, String phone, Date birthday) {
+    public User(String name, String email, String password, int roleId, String address, String phone, Date birthday) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roleId = roleId;
         this.address = address;
         this.phone = phone;
         this.birthday = birthday;
     }
 
-    public User(int id, String name, String email, String password, Role role, String address, String phone, Date birthday) {
+    public User(int id, String name, String email, String password, int roleId, String address, String phone, Date birthday) {
         super(id);
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roleId = roleId;
         this.address = address;
         this.phone = phone;
         this.birthday = birthday;
@@ -72,12 +77,12 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getAddress() {
@@ -122,7 +127,7 @@ public class User extends BaseEntity {
                 Objects.equals(getName(), user.getName()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getRole(), user.getRole()) &&
+                Objects.equals(getRoleId(), user.getRoleId()) &&
                 (Objects.equals(getAddress(), user.getAddress()) || (getAddress() == null && user.getAddress() == null)) &&
                 (Objects.equals(getPhone(), user.getPhone()) || (getAddress() == null && user.getAddress() == null)) &&
                 (Objects.equals(getBirthday(), user.getBirthday()) || (getAddress() == null && user.getAddress() == null));
@@ -130,6 +135,6 @@ public class User extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getName(), getEmail(), getPassword(), getConfirmedPassword(), getRole(), getAddress(), getPhone(), getBirthday());
+        return Objects.hash(super.hashCode(), getName(), getEmail(), getPassword(), getConfirmedPassword(), getRoleId(), getAddress(), getPhone(), getBirthday());
     }
 }

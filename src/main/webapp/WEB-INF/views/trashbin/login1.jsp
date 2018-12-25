@@ -1,4 +1,4 @@
-<%@include file="header.jsp" %>
+<%@include file="../links_top.jsp" %>
 <ct:header></ct:header>
 <ct:body>
 <%--<div class="container">

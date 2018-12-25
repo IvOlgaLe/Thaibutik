@@ -2,11 +2,15 @@ package com.myapp.model;
 
 import java.util.Objects;
 
-public class Role extends BaseEntity{
+public class Role extends BaseEntity {
     private String name;
 
     public Role() {
 
+    }
+
+    public Role(String name) {
+        this.name = name;
     }
 
     public Role(Integer id, String name) {

@@ -1,4 +1,4 @@
-package com.myapp.util;
+package com.myapp.utils;
 
 import com.myapp.exception.NotFoundException;
 import com.myapp.model.BaseEntity;

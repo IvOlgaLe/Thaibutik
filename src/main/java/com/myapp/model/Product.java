@@ -1,25 +1,36 @@
 package com.myapp.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Product extends BaseEntity {
-    private String	name;
+    private String name;
     private Brand brand;
-    private String	imageSource;
-    private String	description;
+    private String imageSource;
+    private String description;
+    private List<Item> itemList;
     private List<Category> categoryList;
-
 
     public Product() {
 
     }
 
-    public Product(Integer id, String name, Brand brand, String imageSource, String description, List<Category> categoryList) {
+    public Product(String name, Brand brand, String imageSource, String description, List<Item> itemList, List<Category> categoryList) {
+        this.name = name;
+        this.brand = brand;
+        this.imageSource = imageSource;
+        this.description = description;
+        this.itemList = itemList;
+        this.categoryList = categoryList;
+    }
+
+    public Product(Integer id, String name, Brand brand, String imageSource, String description, List<Item> itemList, List<Category> categoryList) {
         super(id);
         this.name = name;
         this.brand = brand;
         this.imageSource = imageSource;
         this.description = description;
+        this.itemList = itemList;
         this.categoryList = categoryList;
     }
 
@@ -55,12 +66,38 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
+    public List<Item> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<Item> itemList) {
+        this.itemList = itemList;
+    }
+
     public List<Category> getCategoryList() {
         return categoryList;
     }
 
     public void setCategoryList(List<Category> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Product product = (Product) o;
+        return Objects.equals(name, product.name) &&
+                Objects.equals(brand.id, product.brand.id) &&
+                (Objects.equals(imageSource, product.imageSource) || (getImageSource() == null && product.getImageSource() == null)) &&
+                (Objects.equals(description, product.description) || (getDescription() == null && product.getDescription() == null))
+               ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, brand, imageSource, description, itemList, categoryList);
     }
 }
 

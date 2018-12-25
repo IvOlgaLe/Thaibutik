@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 public class ItemService {
 
-    @Autowired
+/*    @Autowired
     ItemDAO itemDAO;
 
     public Item saveItem(Item item) {
@@ -27,7 +27,7 @@ public class ItemService {
 
     public List<Item> getAllItems() {
         return itemDAO.getAllItems();
-    }
+    }*/
 
 
 }

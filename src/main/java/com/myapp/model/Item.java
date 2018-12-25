@@ -1,13 +1,14 @@
 package com.myapp.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Item extends BaseEntity{
-    private Product	product;
+    private int productId;
     private BigDecimal price;
     private String itemType;
     private String itemSize;
-    private Currency currency;
+    private int currencyId;
     private int	quantity;
     private int	quantOrdered;
     private String	imageSource;
@@ -18,13 +19,12 @@ public class Item extends BaseEntity{
 
     }
 
-    public Item(Integer id, Product product, BigDecimal price, String itemType, String itemSize, Currency currency, int quantity, int quantOrdered, String imageSource, double discount, boolean isAvailable) {
-        super(id);
-        this.product = product;
+    public Item(int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean isAvailable) {
+        this.productId = productId;
         this.price = price;
         this.itemType = itemType;
         this.itemSize = itemSize;
-        this.currency = currency;
+        this.currencyId = currencyId;
         this.quantity = quantity;
         this.quantOrdered = quantOrdered;
         this.imageSource = imageSource;
@@ -32,12 +32,26 @@ public class Item extends BaseEntity{
         this.isAvailable = isAvailable;
     }
 
-    public Product getProduct() {
-        return product;
+    public Item(Integer id, int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean isAvailable) {
+        super(id);
+        this.productId = productId;
+        this.price = price;
+        this.itemType = itemType;
+        this.itemSize = itemSize;
+        this.currencyId = currencyId;
+        this.quantity = quantity;
+        this.quantOrdered = quantOrdered;
+        this.imageSource = imageSource;
+        this.discount = discount;
+        this.isAvailable = isAvailable;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public BigDecimal getPrice() {
@@ -64,12 +78,12 @@ public class Item extends BaseEntity{
         this.itemSize = itemSize;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public int getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
     }
 
     public int getQuantity() {
@@ -110,5 +124,28 @@ public class Item extends BaseEntity{
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Item item = (Item) o;
+        return productId == item.productId &&
+                currencyId == item.currencyId &&
+                quantity == item.quantity &&
+                quantOrdered == item.quantOrdered &&
+                Double.compare(item.discount, discount) == 0 &&
+                isAvailable == item.isAvailable &&
+                Objects.equals(price, item.price) &&
+                (Objects.equals(itemType, item.itemType) || (getItemType() == null && item.getItemType() == null)) &&
+                (Objects.equals(itemSize, item.itemSize) || (getItemSize() == null && item.getItemSize() == null))&&
+                (Objects.equals(imageSource, item.imageSource) || (getImageSource() == null && item.getImageSource() == null));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), productId, price, itemType, itemSize, currencyId, quantity, quantOrdered, imageSource, discount, isAvailable);
     }
 }

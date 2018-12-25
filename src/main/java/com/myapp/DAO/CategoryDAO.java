@@ -52,20 +52,24 @@ public class CategoryDAO implements CategoryDAOI {
     }
 
     @Override
-    public List<Category> getAllCategorys() {
+    public List<Category> getAllCategories() {
         return jdbcTemplate.query(SQL.GET_ALL_CATEGORIES.getQuery(), ROW_MAPPER);
     }
 
     @Override
     public Category getCategoryById(int id) {
-        List<Category> categorys = jdbcTemplate.query(SQL.GET_CATEGORY_BY_ID.getQuery(), ROW_MAPPER, id);
-        return DataAccessUtils.singleResult(categorys);
+        List<Category> categories = jdbcTemplate.query(SQL.GET_CATEGORY_BY_ID.getQuery(), ROW_MAPPER, id);
+        return DataAccessUtils.singleResult(categories);
     }
 
     @Override
-    public Category getCategoryByName(String name) {
-        List<Category> categorys = jdbcTemplate.query(SQL.GET_CATEGORY_BY_NAME.getQuery(), ROW_MAPPER, name);
-        return DataAccessUtils.singleResult(categorys);
+    public List<Category> getCategoryByProductId(int product_id) {
+        return jdbcTemplate.query(SQL.GET_CATEGORY_BY_PRODUCT_ID.getQuery(), ROW_MAPPER, product_id);
+    }
+
+    @Override
+    public List<Category> getCategoryByName(String name) {
+        return  jdbcTemplate.query(SQL.GET_CATEGORY_BY_NAME.getQuery(), ROW_MAPPER, "%" + name + "%");
     }
 
     @Override

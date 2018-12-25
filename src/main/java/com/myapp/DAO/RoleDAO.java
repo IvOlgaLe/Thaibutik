@@ -38,7 +38,7 @@ public class RoleDAO implements RoleDAOI {
     public Role saveRole(Role role) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", role.getId())
-                .addValue("role_name", role.getName());
+                .addValue("name", role.getName());
 
         if (role.isNew()) {
             Number newKey = insertRole.executeAndReturnKey(map);

@@ -40,11 +40,11 @@ public class ItemDAO extends BaseDAO implements ItemDAOI {
     public Item saveItem(Item item) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", item.getId())
-                .addValue("product_id", item.getProduct().getId())
+                .addValue("product_id", item.getProductId())
                 .addValue("price", item.getPrice())
                 .addValue("item_type", item.getItemType())
                 .addValue("item_size", item.getItemSize())
-                .addValue("currency_id", item.getCurrency().getId())
+                .addValue("currency_id", item.getCurrencyId())
                 .addValue("quantity", item.getQuantity())
                 .addValue("quantity", item.getQuantity())
                 .addValue("quant_ordered", item.getQuantOrdered())
@@ -64,6 +64,11 @@ public class ItemDAO extends BaseDAO implements ItemDAOI {
     @Override
     public boolean deleteItemById(int id) {
         return jdbcTemplate.update(SQL.DELETE_ITEM_BY_ID.getQuery(), id) != 0;
+    }
+
+    @Override
+    public boolean deleteItemByProductId(int productId) {
+        return jdbcTemplate.update(SQL.DELETE_ITEM_BY_PRODUCT_ID.getQuery(), productId) != 0;
     }
 
     @Override

@@ -6,7 +6,7 @@
 
     <context:property-placeholder location="classpath:db.properties" system-properties-mode="OVERRIDE"/>
 
-    <bean id="dbPopulator" class="com.myapp.util.DbPopulator">
+    <bean id="dbPopulator" class="com.myapp.utils.DbPopulator">
         <constructor-arg name="scriptLocation" value="classpath:populateDB.sql"/>
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>

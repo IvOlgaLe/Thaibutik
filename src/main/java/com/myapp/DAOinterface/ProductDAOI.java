@@ -2,20 +2,73 @@ package com.myapp.DAOinterface;
 
 import com.myapp.model.Product;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 public interface ProductDAOI {
+
     enum SQL {
-        UPDATE_PRODUCT_BY_ID("UPDATE product SET name=:name, brand_id=:brand_id, image_source=:image_source," +
-                "description:=description WHERE id=:id"),
-        GET_ALL_PRODUCTS("SELECT * FROM product"),
-        GET_PRODUCT_BY_ID("SELECT * FROM product WHERE id = ?"),
-        GET_PRODUCT_BY_NAME("SELECT * FROM product WHERE name = ?"),
-        GET_PRODUCT_BY_CATEGORY_ID("SELECT * FROM product p " +
-                "JOIN category_product cp ON p.id = cp.product_id" +
-                "WHERE cp.category_id = ?"),
-        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE id = ?");
+        UPDATE_PRODUCT_BY_ID(
+                "UPDATE product SET name=:name, brand_id=:brand_id, image_source=:image_source," +
+                        "description=:description WHERE id=:id"),
+/*        GET_ALL_PRODUCTS(
+                "SELECT p.id AS product_id, p.name AS name, p.brand_id AS brand_id, p.image_source AS image_source, p.description AS description, " +
+                        "b.name AS brand_name, b.description AS brand_description, " +
+                        "i.id AS item_id, i.price AS price, i.item_type AS item_type, i.item_size AS item_size, i.currency_id AS currency_id, i.quantity AS quantity, " +
+                        "i.quant_ordered AS quant_ordered, i.image_source AS item_image_source, i.discount AS discount, i.available AS available " +
+                        "FROM product p " +
+                        "LEFT JOIN brand b ON p.brand_id = b.id " +
+                        "LEFT JOIN item i ON p.id = i.product_id"),*/
+        DELETE_PRODUCT_BY_ID("DELETE FROM product WHERE id = ?"),
+        GET_PRODUCT_BY_IDs(
+                "SELECT p.id AS product_id, p.name AS name, p.brand_id AS brand_id, p.image_source AS image_source, p.description AS description, " +
+                        "b.name AS brand_name, b.description AS brand_description, " +
+                        "i.id AS item_id, i.price AS price, i.item_type AS item_type, i.item_size AS item_size, i.currency_id AS currency_id, i.quantity AS quantity, " +
+                        "i.quant_ordered AS quant_ordered, i.image_source AS item_image_source, i.discount AS discount, i.available AS available " +
+                        "FROM product p " +
+                        "LEFT JOIN brand b ON p.brand_id = b.id " +
+                        "LEFT JOIN item i ON p.id = i.product_id " +
+                        "WHERE p.id IN (?)"),
+        GET_PRODUCT_BY_ID(
+                "SELECT p.id AS product_id, p.name AS name, p.brand_id AS brand_id, p.image_source AS image_source, p.description AS description, " +
+                        "b.name AS brand_name, b.description AS brand_description, " +
+                        "i.id AS item_id, i.price AS price, i.item_type AS item_type, i.item_size AS item_size, i.currency_id AS currency_id, i.quantity AS quantity, " +
+                        "i.quant_ordered AS quant_ordered, i.image_source AS item_image_source, i.discount AS discount, i.available AS available " +
+                        "FROM product p " +
+                        "LEFT JOIN brand b ON p.brand_id = b.id " +
+                        "LEFT JOIN item i ON p.id = i.product_id " +
+                        "WHERE p.id = ?"),
+        GET_PRODUCT_BY_PARAM(
+                "SELECT p.id AS product_id, p.name AS name, p.brand_id AS brand_id, p.image_source AS image_source, p.description AS description, " +
+                        "b.name AS brand_name, b.description AS brand_description, " +
+                        "i.id AS item_id, i.price AS price, i.item_type AS item_type, i.item_size AS item_size, i.currency_id AS currency_id, i.quantity AS quantity, " +
+                        "i.quant_ordered AS quant_ordered, i.image_source AS item_image_source, i.discount AS discount, i.available AS available " +
+                        "FROM product p " +
+                        "LEFT JOIN brand b ON p.brand_id = b.id " +
+                        "LEFT JOIN item i ON p.id = i.product_id " +
+                        "WHERE 1 = 1 "),
+        GET_PRODUCT_BY_CAT_PARAM(
+                "SELECT p.id AS product_id, p.name AS name, p.brand_id AS brand_id, p.image_source AS image_source, p.description AS description, " +
+                        "b.name AS brand_name, b.description AS brand_description, " +
+                        "cp.category_id AS category_id, c.name AS category_name, " +
+                        "i.id AS item_id, i.price AS price, i.item_type AS item_type, i.item_size AS item_size, i.currency_id AS currency_id, i.quantity AS quantity, " +
+                        "i.quant_ordered AS quant_ordered, i.image_source AS item_image_source, i.discount AS discount, i.available AS available " +
+                        "FROM product p " +
+                        "JOIN category_product cp ON p.id = cp.product_id " +
+                        "JOIN category c ON cp.category_id = c.id " +
+                        "LEFT JOIN brand b ON p.brand_id = b.id " +
+                        "LEFT JOIN item i ON p.id = i.product_id " +
+                        "WHERE c.id = ? "),
+        PARAM_NAME(
+                "AND UPPER(p.name) LIKE ? "),
+        PARAM_BRAND_ID(
+                "AND p.brand_id = ? "),
+        PARAM_LOW_PRICE(
+                "AND i.price >= ? "),
+        PARAM_HIGH_PRICE(
+                "AND i.price <= ? ");
+
 
         private final String query;
 
@@ -34,12 +87,6 @@ public interface ProductDAOI {
 
     Product getProductById(int id);
 
-    List<Product> getProductByName(String name);
+    List<Product> getProductByParam(Map<String, Object> param);
 
-
-    List<Product> getProductByCategoryId(int catId);
-
-    List<Product> getProductsByParam(Map<String, String> param);
-
-    List<Product> getAllProducts();
 }

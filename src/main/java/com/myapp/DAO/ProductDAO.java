@@ -1,23 +1,29 @@
 package com.myapp.DAO;
 
 import com.myapp.DAOinterface.ProductDAOI;
+import com.myapp.model.Brand;
+import com.myapp.model.Item;
 import com.myapp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Repository
 public class ProductDAO extends BaseDAO implements ProductDAOI {
-    private static final BeanPropertyRowMapper<Product> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Product.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -35,6 +41,58 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+    private class MyObjectExtractor implements ResultSetExtractor {
+
+        public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, Product> map = new HashMap<Integer, Product>();
+            List<Product> resultList = new ArrayList<Product>();
+            int prevProductId = 0;
+            while (rs.next()) {
+                Integer product_id = rs.getInt("product_id");
+                Product product = map.get(product_id);
+                if (product == null){
+                    if (prevProductId != 0) {
+                        resultList.add(map.get(prevProductId));
+                    }
+                    product = new Product();
+                    product.setId(product_id);
+                    product.setName(rs.getString("name"));
+
+                    product.setImageSource(rs.getString("image_source"));
+                    product.setDescription(rs.getString("description"));
+
+                    Brand brand = new Brand();
+                    brand.setId(rs.getInt("brand_id"));
+                    brand.setName(rs.getString("brand_name"));
+                    brand.setDescription(rs.getString("brand_description"));
+
+                    product.setBrand(brand);
+                    map.put(product_id, product);
+                }
+
+                List itemList = product.getItemList();
+                if (itemList == null) {
+                    itemList = new ArrayList<Item>();
+                }
+                Item item = new Item();
+                item.setId(rs.getInt("item_id"));
+                item.setCurrencyId(rs.getInt("currency_id"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setQuantOrdered(rs.getInt("quant_ordered"));
+                item.setDiscount(rs.getInt("discount"));
+                item.setPrice(rs.getBigDecimal("price"));
+                item.setItemType(rs.getString("item_type"));
+                item.setItemSize(rs.getString("item_size"));
+                item.setImageSource(rs.getString("image_source"));
+                item.setAvailable(rs.getBoolean("available"));
+                itemList.add(item);
+                product.setItemList(itemList);
+                prevProductId = product_id;
+            }
+            return resultList;
+        }
+    }
+
     @Override
     public Product saveProduct(Product product) {
         MapSqlParameterSource map = new MapSqlParameterSource()
@@ -42,8 +100,7 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
                 .addValue("name", product.getName())
                 .addValue("brand_id", product.getBrand().getId())
                 .addValue("image_source", product.getImageSource())
-                .addValue("description", product.getDescription())
-                ;
+                .addValue("description", product.getDescription());
 
         if (product.isNew()) {
             Number newKey = insertProduct.executeAndReturnKey(map);
@@ -59,29 +116,44 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
         return jdbcTemplate.update(SQL.DELETE_PRODUCT_BY_ID.getQuery(), id) != 0;
     }
 
+    private final MyObjectExtractor MY_OBJECT_EXTRACTOR = new MyObjectExtractor();
+
     @Override
     public Product getProductById(int id) {
-        List<Product> products = jdbcTemplate.query(SQL.GET_PRODUCT_BY_ID.getQuery(), ROW_MAPPER, id);
+        List<Product> products = (List<Product>) jdbcTemplate.query(SQL.GET_PRODUCT_BY_ID.getQuery(), MY_OBJECT_EXTRACTOR, id);
         return DataAccessUtils.singleResult(products);
     }
 
     @Override
-    public List<Product> getProductByName(String name) {
-        return jdbcTemplate.query(SQL.GET_PRODUCT_BY_NAME.getQuery(), ROW_MAPPER, name);
-    }
-
-    @Override
-    public List<Product> getProductByCategoryId(int catId) {
-        return  jdbcTemplate.query(SQL.GET_PRODUCT_BY_CATEGORY_ID.getQuery(), ROW_MAPPER, catId);
-    }
-
-    @Override
-    public List<Product> getProductsByParam(Map<String, String> param) {
-        return null;
-    }
-
-    @Override
-    public List<Product> getAllProducts() {
-        return jdbcTemplate.query(SQL.GET_ALL_PRODUCTS.getQuery(), ROW_MAPPER);
+    public List<Product> getProductByParam(Map<String, Object> param) {
+        String query;
+        List<Object> argsList = new ArrayList<>();
+        if (param.get("categoryId") != null) {
+            query = SQL.GET_PRODUCT_BY_CAT_PARAM.getQuery();
+            argsList.add(param.get("categoryId"));
+        } else {
+            query = SQL.GET_PRODUCT_BY_PARAM.getQuery();
+        }
+        if (param.get("name") != null) {
+            query = query + SQL.PARAM_NAME.getQuery();
+            argsList.add("%" + param.get("name").toString().toUpperCase() + "%");
+        }
+        if (param.get("brandId") != null) {
+            query = query + SQL.PARAM_BRAND_ID.getQuery();
+            argsList.add(param.get("brandId"));
+        }
+        if (param.get("lowPrice") != null) {
+            query = query + SQL.PARAM_LOW_PRICE.getQuery();
+            argsList.add(param.get("lowPrice"));
+        }
+        if (param.get("highPrice") != null) {
+            query = query + SQL.PARAM_HIGH_PRICE.getQuery();
+            argsList.add(param.get("highPrice"));
+        }
+        if (param.get("orderBy") != null) {
+            query = query + "ORDER BY " + param.get("orderBy");
+        }
+        Object[] args = argsList.toArray();
+        return (List<Product>) jdbcTemplate.query(query, MY_OBJECT_EXTRACTOR, args);
     }
 }

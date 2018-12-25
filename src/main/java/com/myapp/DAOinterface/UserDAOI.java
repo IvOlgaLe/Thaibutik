@@ -7,14 +7,24 @@ import java.util.Map;
 
 public interface UserDAOI {
     enum SQL {
-/*        INSERT_USER("INSERT INTO users(name, email, password, role_id, address, phone, birthday)" +
-                "VALUES (:name, :email, :password, :roleId, :address, :phone, :birthday)"),       //7 items*/
         UPDATE_USER_BY_ID("UPDATE users SET name=:name, email=:email, password=:password, role_id=:role_id, " +
                 "address=:address, phone=:phone, birthday=:birthday WHERE id=:id"),
+        DELETE_USER_BY_ID("DELETE FROM users WHERE id = ?"),
         GET_USER_BY_ID("SELECT * FROM users WHERE id = ?"),
         GET_USER_BY_EMAIL("SELECT * FROM users WHERE email = ?"),
-        GET_ALL_USERS("SELECT * FROM users"),
-        DELETE_USER_BY_ID("DELETE FROM users WHERE id = ?")
+        GET_USER_BY_PARAM(
+                "SELECT * FROM users " +
+                "WHERE 1 = 1 "),
+        PARAM_NAME(
+                "AND UPPER(name) LIKE ? "),
+        PARAM_ADDRESS(
+                "AND UPPER(address) LIKE ? "),
+        PARAM_ROLE_ID(
+                "AND role_id = ? "),
+        PARAM_PHONE(
+                "AND phone LIKE ? "),
+        PARAM_BIRTHDAY(
+                "AND birthday = ? ")
         ;
 
         private final String query;
@@ -36,7 +46,7 @@ public interface UserDAOI {
 
     User getUserByEmail(String email);
 
-    List<User> getUsersByParam(Map<String, String> param);
+    List<User> getUsersByParam(Map<String, Object> param);
 
     List<User> getAllUsers();
 }
