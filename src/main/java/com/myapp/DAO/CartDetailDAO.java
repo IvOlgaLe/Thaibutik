@@ -35,12 +35,12 @@ public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
     @Override
     public CartDetail saveCartDetail(CartDetail cartDetail) {
         MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("cart_id", cartDetail.getCart().getId())
+                .addValue("cart_id", cartDetail.getCartId())
                 .addValue("item_id", cartDetail.getItem().getId())
                 .addValue("quantity", cartDetail.getQuantity())
                 ;
 
-        if (getCartDetailById(cartDetail.getCart().getId(), cartDetail.getItem().getId()) == null) {
+        if (getCartDetailById(cartDetail.getCartId(), cartDetail.getItem().getId()) == null) {
             insertCartDetail.execute(map);
         } else {
             namedParameterJdbcTemplate.update(CartDetailDAOI.SQL.UPDATE_CDETAIL_BY_ID.getQuery(), map);

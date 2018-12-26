@@ -9,8 +9,9 @@ public class Cart extends BaseEntity{
     private int userId;
     private BigDecimal totalPrice;
     private Currency currency;
-    private List<CartDetail> cartDetailList;
     private Date cartDate;
+    private List<CartDetail> cartDetailList;
+
 
     public Cart() {}
 

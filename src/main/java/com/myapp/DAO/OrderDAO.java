@@ -2,24 +2,27 @@ package com.myapp.DAO;
 
 import com.myapp.DAOinterface.OrderDAOI;
 import com.myapp.model.Order;
+import com.myapp.model.OrderDetail;
+import com.myapp.model.OrderState;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Repository
-public class OrderDAO  extends BaseDAO implements OrderDAOI {
+public class OrderDAO extends BaseDAO implements OrderDAOI {
     private static final BeanPropertyRowMapper<Order> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Order.class);
-
     private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -29,12 +32,70 @@ public class OrderDAO  extends BaseDAO implements OrderDAOI {
     @Autowired
     public OrderDAO(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertOrder = new SimpleJdbcInsert(dataSource)
-                .withTableName("order")
+                .withTableName("orders")
                 .usingGeneratedKeyColumns("id");
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
+
+    private class MyObjectExtractor implements ResultSetExtractor {
+
+        public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, Order> map = new HashMap<Integer, Order>();
+            List<Order> resultList = new ArrayList<Order>();
+            while (rs.next()) {
+                Integer order_id = rs.getInt("order_id");
+                Order order = map.get(order_id);
+                if (order == null) {
+                    order = new Order();
+                }
+                if(!resultList.contains(order)) {
+                    resultList.add(order);
+                }
+
+                order.setId(order_id);
+                order.setUserId(rs.getInt("user_id"));
+                order.setOrderDate(rs.getDate("order_date"));
+                order.setTotalPrice(rs.getBigDecimal("total_price"));
+                order.setCurrencyId(rs.getInt("currency_id"));
+                order.setDeliveryDate(rs.getDate("delivery_date"));
+                order.setDeliveryInfo(rs.getString("delivery_info"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+
+                OrderState orderState = new OrderState();
+                orderState.setId(rs.getInt("order_state_id"));
+                orderState.setName(rs.getString("order_state_name"));
+
+                order.setOrderState(orderState);
+                map.put(order_id, order);
+
+                List orderDetailList = order.getOrderDetailList();
+                if (orderDetailList == null) {
+                    orderDetailList = new ArrayList<OrderDetail>();
+                }
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderId(rs.getInt("order_id"));
+                orderDetail.setProductId(rs.getInt("product_id"));
+                orderDetail.setItemId(rs.getInt("item_id"));
+                orderDetail.setProductName(rs.getString("product_name"));
+                orderDetail.setBrandName(rs.getString("brand_name"));
+                orderDetail.setItemType(rs.getString("item_type"));
+                orderDetail.setItemSize(rs.getString("item_size"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setDiscount(rs.getInt("discount"));
+                orderDetail.setPrice(rs.getBigDecimal("price"));
+                orderDetail.setCurrencyId(rs.getInt("currency_id"));
+                orderDetail.setProductImageSource(rs.getString("product_image_source"));
+                orderDetail.setItemImageSource(rs.getString("item_image_source"));
+                orderDetailList.add(orderDetail);
+                order.setOrderDetailList(orderDetailList);
+            }
+            return resultList;
+        }
+    }
+
+    private final MyObjectExtractor MY_OBJECT_EXTRACTOR = new MyObjectExtractor();
 
     @Override
     public Order saveOrder(Order order) {
@@ -44,10 +105,10 @@ public class OrderDAO  extends BaseDAO implements OrderDAOI {
                 .addValue("order_date", order.getOrderDate())
                 .addValue("total_price", order.getTotalPrice())
                 .addValue("delivery_date", order.getDeliveryDate())
+                .addValue("delivery_address", order.getDeliveryAddress())
                 .addValue("delivery_info", order.getDeliveryInfo())
-                .addValue("currency_id", order.getCurrency().getCurrencyCode())
-                .addValue("order_state_id", order.getOrderState().getId())
-                ;
+                .addValue("currency_id", order.getCurrencyId())
+                .addValue("order_state_id", order.getOrderState().getId());
 
         if (order.isNew()) {
             Number newKey = insertOrder.executeAndReturnKey(map);
@@ -62,39 +123,48 @@ public class OrderDAO  extends BaseDAO implements OrderDAOI {
     public boolean deleteOrderById(int id) {
         return jdbcTemplate.update(OrderDAOI.SQL.DELETE_ORDER_BY_ID.getQuery(), id) != 0;
     }
+
     @Override
     public List<Order> getAllOrders() {
-        return jdbcTemplate.query(OrderDAOI.SQL.GET_ALL_ORDERS.getQuery(), ROW_MAPPER);
+        //  return jdbcTemplate.query(SQL.GET_ALL_ORDERS.getQuery(), ROW_MAPPER);
+        return (List<Order>) jdbcTemplate.query(SQL.GET_ORDER_BY_PARAM.getQuery(), MY_OBJECT_EXTRACTOR);
     }
+
     @Override
     public Order getOrderById(int id) {
-        List<Order> orders = jdbcTemplate.query(OrderDAOI.SQL.GET_ORDER_BY_ID.getQuery(), ROW_MAPPER, id);
+        List<Order> orders = (List<Order>) jdbcTemplate.query(SQL.GET_ORDER_BY_ID.getQuery(), MY_OBJECT_EXTRACTOR, id);
         return DataAccessUtils.singleResult(orders);
     }
 
     @Override
-    public List<Order> getOrderByUserId(int userId) {
-        return jdbcTemplate.query(OrderDAOI.SQL.GET_ORDER_BY_USER_ID.getQuery(), ROW_MAPPER, userId);
-    }
-
-    @Override
-    public List<Order> getOrderByOStateId(int oStateId) {
-        return jdbcTemplate.query(SQL.GET_ORDER_BY_OSTATE_ID.getQuery(), ROW_MAPPER, oStateId);
-    }
-
-    @Override
-    public List<Order> getOrderByDate(Date fDate, Date sDate) {
-        return jdbcTemplate.query(SQL.GET_ORDER_BY_DATE.getQuery(), ROW_MAPPER, fDate, sDate);
-    }
-
-    @Override
-    public List<Order> getOrderByDeliveryDate(Date fDate, Date sDate) {
-        return jdbcTemplate.query(SQL.GET_ORDER_BY_DELIVERY_DATE.getQuery(), ROW_MAPPER, fDate, sDate);
-    }
-
-    @Override
-    public List<Order> getOrdersByParam(Map<String, String> param) {
-        return null;
+    public List<Order> getOrderByParam(Map<String, Object> param) {
+        String query = SQL.GET_ORDER_BY_PARAM.getQuery();
+        List<Object> argsList = new ArrayList<>();
+        if (param.get("userId") != null) {
+            query = query + SQL.PARAM_USER_ID.getQuery();
+            argsList.add(param.get("userId"));
+        }
+        if (param.get("oStateId") != null) {
+            query = query + SQL.PARAM_OSTATE_ID.getQuery();
+            argsList.add(param.get("oStateId"));
+        }
+        if (param.get("beginOrderDate") != null) {
+            query = query + SQL.PARAM_ORDER_DATE.getQuery();
+            argsList.add(param.get("beginOrderDate"));
+            argsList.add(param.get("endOrderDate"));
+        }
+        if (param.get("beginDeliveryDate") != null) {
+            query = query + SQL.PARAM_DELIVERY_DATE.getQuery();
+            argsList.add(param.get("beginDeliveryDate"));
+            argsList.add(param.get("endDeliveryDate"));
+        }
+        if (param.get("orderBy") != null) {
+            query = query + "ORDER BY " + param.get("orderBy");
+        } else if (param.get("orderByDesc") != null) {
+            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
+        }
+        Object[] args = argsList.toArray();
+        return (List<Order>) jdbcTemplate.query(query, MY_OBJECT_EXTRACTOR, args);
     }
 
 

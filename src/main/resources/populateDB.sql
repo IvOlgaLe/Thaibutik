@@ -72,14 +72,15 @@ CREATE TABLE order_state (
 );
 
 CREATE TABLE orders (
-  id             NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1) NOT NULL,
-  user_id        NUMERIC                                                                NOT NULL,
-  order_date     DATE                                                                   NOT NULL,
-  total_price    NUMBER(5, 2)                                                           NOT NULL,
-  currency_id    NUMERIC                                                                NOT NULL,
-  delivery_date  DATE,
-  delivery_info  VARCHAR2(255),
-  order_state_id NUMERIC                                                                NOT NULL,
+  id                NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1) NOT NULL,
+  user_id           NUMERIC                                                                NOT NULL,
+  order_date        DATE                                                                   NOT NULL,
+  total_price       NUMBER(5, 2)                                                           NOT NULL,
+  currency_id       NUMERIC                                                                NOT NULL,
+  delivery_date     DATE,
+  delivery_address  VARCHAR2(255),
+  delivery_info     VARCHAR2(255),
+  order_state_id    NUMERIC                                                                NOT NULL,
   CONSTRAINT pk_orders PRIMARY KEY (id),
   CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_orders_curr FOREIGN KEY (currency_id) REFERENCES currency (id),
@@ -154,6 +155,13 @@ VALUES ('ROLE_MODERATOR');
 INSERT INTO role (name)
 VALUES ('ROLE_USER');
 
+INSERT INTO order_state (name)
+VALUES ('PROCESSING');
+INSERT INTO role (name)
+VALUES ('DELIVERED');
+INSERT INTO role (name)
+VALUES ('CANCELLED');
+
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
 VALUES ('Cristina White', 'cristina@gmail.com', '111', 1, NULL, NULL, NULL);
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
@@ -192,7 +200,7 @@ INSERT INTO item (product_id,
                   image_source,
                   discount,
                   available)
-VALUES (100001, 18.78, 'Type01', '50 ml', 11, 45, 250, 'img05', 0, 1);
+VALUES (100001, 18.78, 'Strawberry', '50 ml', 11, 45, 250, 'img05', 0, 1);
 INSERT INTO item (product_id,
                   price,
                   item_type,

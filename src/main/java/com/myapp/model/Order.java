@@ -4,30 +4,46 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Order extends BaseEntity{
     private int userId;
     private Date orderDate;
     private BigDecimal totalPrice;
-    private Currency currency;
-    private List<OrderDetail> orderDetailList;
+    private int currencyId;
     private Date deliveryDate;
     private String deliveryInfo;
     private OrderState orderState;
+    private String deliveryAddress;
+    private List<OrderDetail> orderDetailList;
 
     public Order() {}
 
-    public Order(Integer id, int userId, Date orderDate, BigDecimal totalPrice, Currency currency, List<OrderDetail> orderDetailList,
-                 Date deliveryDate, String deliveryInfo, OrderState orderState) {
+    public Order( int userId, Date orderDate, BigDecimal totalPrice, int currencyId, Date deliveryDate,
+                 String deliveryInfo, OrderState orderState, String deliveryAddress, List<OrderDetail> orderDetailList) {
+        this.userId = userId;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.currencyId = currencyId;
+        this.deliveryDate = deliveryDate;
+        this.deliveryInfo = deliveryInfo;
+        this.orderState = orderState;
+        this.deliveryAddress = deliveryAddress;
+        this.orderDetailList = orderDetailList;
+    }
+
+    public Order(Integer id, int userId, Date orderDate, BigDecimal totalPrice, int currencyId, Date deliveryDate,
+                 String deliveryInfo, OrderState orderState, String deliveryAddress, List<OrderDetail> orderDetailList) {
         super(id);
         this.userId = userId;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
-        this.currency = currency;
-        this.orderDetailList = orderDetailList;
+        this.currencyId = currencyId;
         this.deliveryDate = deliveryDate;
         this.deliveryInfo = deliveryInfo;
         this.orderState = orderState;
+        this.deliveryAddress = deliveryAddress;
+        this.orderDetailList = orderDetailList;
     }
 
     public int getUserId() {
@@ -50,24 +66,16 @@ public class Order extends BaseEntity{
         return totalPrice;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public List<OrderDetail> getOrderDetailList() {
-        return orderDetailList;
+    public int getCurrencyId() {
+        return currencyId;
     }
 
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
-        this.orderDetailList = orderDetailList;
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
     }
 
     public Date getDeliveryDate() {
@@ -92,5 +100,43 @@ public class Order extends BaseEntity{
 
     public void setOrderState(OrderState orderState) {
         this.orderState = orderState;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public List<OrderDetail> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+        this.orderDetailList = orderDetailList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Order order = (Order) o;
+        return (userId == order.userId &&
+                currencyId == order.currencyId &&
+                orderDate.compareTo(order.orderDate) == 0 &&
+                totalPrice.compareTo(order.totalPrice) == 0 &&
+                (deliveryDate.compareTo(order.deliveryDate) == 0 || (deliveryDate == null && order.deliveryDate == null)) &&
+                (Objects.equals(deliveryAddress, order.deliveryAddress) || (deliveryAddress == null && order.deliveryAddress == null))&&
+                (Objects.equals(deliveryInfo, order.deliveryInfo) || (deliveryInfo == null && order.deliveryInfo == null))&&
+                Objects.equals(orderState, order.orderState) &&
+                Objects.equals(orderDetailList.size(), order.orderDetailList.size())) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), userId, orderDate, totalPrice, currencyId, deliveryDate, deliveryInfo, orderState, deliveryAddress, orderDetailList);
     }
 }

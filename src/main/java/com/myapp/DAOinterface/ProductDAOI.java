@@ -64,6 +64,10 @@ public interface ProductDAOI {
                 "AND UPPER(p.name) LIKE ? "),
         PARAM_BRAND_ID(
                 "AND p.brand_id = ? "),
+        PARAM_ITEM_TYPE(
+                "AND UPPER(i.item_type) LIKE ? "),
+        PARAM_ITEM_SIZE(
+                "AND UPPER(i.item_size) LIKE ? "),
         PARAM_LOW_PRICE(
                 "AND i.price >= ? "),
         PARAM_HIGH_PRICE(

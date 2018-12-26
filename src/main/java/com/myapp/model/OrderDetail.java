@@ -1,42 +1,99 @@
 package com.myapp.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class OrderDetail{
-    private Order order;
-    private Item item;
+    private int orderId;
+    private int productId;
+    private String productName;
+    private String brandName;
+    private int itemId;
+    private String itemType;
+    private String itemSize;
     private int	quantity;
     private BigDecimal price;
-    private Currency currency;
-    private double	discount;
+    private int currencyId;
+    private double discount;
+    private String productImageSource;
+    private String itemImageSource;
 
     public OrderDetail() {
 
     }
 
-    public OrderDetail(Order order, Item item, int quantity, BigDecimal price, Currency currency, double discount) {
-        this.order = order;
-        this.item = item;
+    public OrderDetail(int orderId, int productId, String productName, String brandName, int itemId, String itemType,
+                       String itemSize, int quantity, BigDecimal price, int currencyId, double discount,
+                       String productImageSource, String itemImageSource) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productName = productName;
+        this.brandName = brandName;
+        this.itemId = itemId;
+        this.itemType = itemType;
+        this.itemSize = itemSize;
         this.quantity = quantity;
         this.price = price;
-        this.currency = currency;
+        this.currencyId = currencyId;
         this.discount = discount;
+        this.productImageSource = productImageSource;
+        this.itemImageSource = itemImageSource;
     }
 
-    public Order getOrder() {
-        return order;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
-    public Item getItem() {
-        return item;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public String getItemSize() {
+        return itemSize;
+    }
+
+    public void setItemSize(String itemSize) {
+        this.itemSize = itemSize;
     }
 
     public int getQuantity() {
@@ -55,12 +112,12 @@ public class OrderDetail{
         this.price = price;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public int getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
     }
 
     public double getDiscount() {
@@ -69,5 +126,46 @@ public class OrderDetail{
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public String getProductImageSource() {
+        return productImageSource;
+    }
+
+    public void setProductImageSource(String productImageSource) {
+        this.productImageSource = productImageSource;
+    }
+
+    public String getItemImageSource() {
+        return itemImageSource;
+    }
+
+    public void setItemImageSource(String itemImageSource) {
+        this.itemImageSource = itemImageSource;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderDetail that = (OrderDetail) o;
+        return orderId == that.orderId &&
+                productId == that.productId &&
+                itemId == that.itemId &&
+                quantity == that.quantity &&
+                currencyId == that.currencyId &&
+                Double.compare(that.discount, discount) == 0 &&
+                Objects.equals(productName, that.productName) &&
+                Objects.equals(brandName, that.brandName) &&
+                Objects.equals(itemType, that.itemType) &&
+                Objects.equals(itemSize, that.itemSize) &&
+                price.compareTo(that.price) == 0 &&
+                Objects.equals(productImageSource, that.productImageSource) &&
+                Objects.equals(itemImageSource, that.itemImageSource);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, productId, productName, brandName, itemId, itemType, itemSize, quantity, price, currencyId, discount, productImageSource, itemImageSource);
     }
 }

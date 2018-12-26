@@ -1,24 +1,24 @@
 package com.myapp.model;
 
 public class CartDetail{
-    private Cart cart;
+    private int cartId;
     private Item item;
     private int quantity;
 
     public CartDetail() {}
 
-    public CartDetail(Cart cart, Item item, int quantity) {
-        this.cart = cart;
+    public CartDetail(int cartId, Item item, int quantity) {
+        this.cartId = cartId;
         this.item = item;
         this.quantity = quantity;
     }
 
-    public Cart getCart() {
-        return cart;
+    public int getCartId() {
+        return cartId;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 
     public Item getItem() {

@@ -105,6 +105,8 @@ public class UserDAO extends BaseDAO implements UserDAOI {
         }
         if (param.get("orderBy") != null) {
             query = query + "ORDER BY " + param.get("orderBy");
+        }  else if (param.get("orderByDesc") != null) {
+            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
         }
         Object[] args = argsList.toArray();
         return jdbcTemplate.query(query, ROW_MAPPER, args);

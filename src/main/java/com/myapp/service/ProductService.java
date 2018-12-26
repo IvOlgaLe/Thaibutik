@@ -48,7 +48,7 @@ public class ProductService {
     }
 
     public boolean deleteProductById(int id) {
-        return deleteItemByProductId(id) && productDAO.deleteProductById(id);
+        return itemDAO.deleteItemByProductId(id) && productDAO.deleteProductById(id);
     }
 
     public List<Product> getAllProducts() {

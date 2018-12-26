@@ -55,7 +55,7 @@ public class ProductServiceTest {
         Brand brand = new Brand(201, "Mary Key", "Mary Key Description");
         List<Item> itemList = new ArrayList<>();
         itemList.add(new Item(0, new BigDecimal("12.09"), "Item Type", "Item Size", 11, 20, 5, "img02", 15.0, TRUE));
-        Product productExp = new Product("Cream Save", brand, "img01", "description to product Cream", itemList, null);
+        Product productExp = new Product("Cream Save", brand, "img01", "description to product Cream", itemList);
         Product product = productService.saveProduct(productExp);
         int productId = product.getId();
 
@@ -120,11 +120,30 @@ public class ProductServiceTest {
     }
 
     @Test
+    public void testGetProductByItemTypeSize() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("itemType", "strawberry");
+        param.put("itemSize", "50 ml");
+        List<Product> productList = productService.getProductByParam(param);
+        Assert.assertEquals(1, productList.size());
+    }
+
+    @Test
     public void testGetAllProductOrderBy() {
         Map<String, Object> param = new HashMap<>();
         param.put("orderBy", "name");
         List<Product> productList = productService.getAllProducts(param);
+        Assert.assertEquals(2, productList.size());
         Assert.assertEquals("Shampoo", productList.get(0).getName());
+    }
+
+    @Test
+    public void testGetAllProductOrderByDesc() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("orderByDesc", "name");
+        List<Product> productList = productService.getAllProducts(param);
+        Assert.assertEquals(2, productList.size());
+        Assert.assertEquals("Soap", productList.get(0).getName());
     }
 
     //-----CategoryDAO-----------
@@ -178,7 +197,7 @@ public class ProductServiceTest {
     @Test
     public void testCRUDItem() {
         //-----save------
-        Item itemExp = new Item(100002, new BigDecimal("16.35"), "Item Type", "Item Size", 11, 25, 14, "img02", 15.0, TRUE);
+        Item itemExp = new Item(100002, new BigDecimal("16.35"), "Blueberry", "50 ml", 11, 25, 14, "img02", 15.0, TRUE);
         Item item = productService.saveItem(itemExp);
         int itemId = item.getId();
 

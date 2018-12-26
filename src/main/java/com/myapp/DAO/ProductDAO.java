@@ -46,29 +46,28 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
         public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
             Map<Integer, Product> map = new HashMap<Integer, Product>();
             List<Product> resultList = new ArrayList<Product>();
-            int prevProductId = 0;
             while (rs.next()) {
                 Integer product_id = rs.getInt("product_id");
                 Product product = map.get(product_id);
-                if (product == null){
-                    if (prevProductId != 0) {
-                        resultList.add(map.get(prevProductId));
-                    }
+                if (product == null) {
                     product = new Product();
-                    product.setId(product_id);
-                    product.setName(rs.getString("name"));
-
-                    product.setImageSource(rs.getString("image_source"));
-                    product.setDescription(rs.getString("description"));
-
-                    Brand brand = new Brand();
-                    brand.setId(rs.getInt("brand_id"));
-                    brand.setName(rs.getString("brand_name"));
-                    brand.setDescription(rs.getString("brand_description"));
-
-                    product.setBrand(brand);
-                    map.put(product_id, product);
                 }
+                if(!resultList.contains(product)) {
+                    resultList.add(product);
+                }
+
+                product.setId(product_id);
+                product.setName(rs.getString("name"));
+                product.setImageSource(rs.getString("image_source"));
+                product.setDescription(rs.getString("description"));
+
+                Brand brand = new Brand();
+                brand.setId(rs.getInt("brand_id"));
+                brand.setName(rs.getString("brand_name"));
+                brand.setDescription(rs.getString("brand_description"));
+
+                product.setBrand(brand);
+                map.put(product_id, product);
 
                 List itemList = product.getItemList();
                 if (itemList == null) {
@@ -87,11 +86,13 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
                 item.setAvailable(rs.getBoolean("available"));
                 itemList.add(item);
                 product.setItemList(itemList);
-                prevProductId = product_id;
             }
             return resultList;
         }
+
     }
+
+    private final MyObjectExtractor MY_OBJECT_EXTRACTOR = new MyObjectExtractor();
 
     @Override
     public Product saveProduct(Product product) {
@@ -115,8 +116,6 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
     public boolean deleteProductById(int id) {
         return jdbcTemplate.update(SQL.DELETE_PRODUCT_BY_ID.getQuery(), id) != 0;
     }
-
-    private final MyObjectExtractor MY_OBJECT_EXTRACTOR = new MyObjectExtractor();
 
     @Override
     public Product getProductById(int id) {
@@ -142,6 +141,14 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
             query = query + SQL.PARAM_BRAND_ID.getQuery();
             argsList.add(param.get("brandId"));
         }
+        if (param.get("itemType") != null) {
+            query = query + SQL.PARAM_ITEM_TYPE.getQuery();
+            argsList.add("%" + param.get("itemType").toString().toUpperCase() + "%");
+        }
+        if (param.get("itemSize") != null) {
+            query = query + SQL.PARAM_ITEM_SIZE.getQuery();
+            argsList.add(param.get("itemSize").toString().toUpperCase());
+        }
         if (param.get("lowPrice") != null) {
             query = query + SQL.PARAM_LOW_PRICE.getQuery();
             argsList.add(param.get("lowPrice"));
@@ -152,6 +159,8 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
         }
         if (param.get("orderBy") != null) {
             query = query + "ORDER BY " + param.get("orderBy");
+        } else if (param.get("orderByDesc") != null) {
+            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
         }
         Object[] args = argsList.toArray();
         return (List<Product>) jdbcTemplate.query(query, MY_OBJECT_EXTRACTOR, args);
