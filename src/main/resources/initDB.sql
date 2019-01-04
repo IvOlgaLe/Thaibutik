@@ -144,6 +144,11 @@ CREATE TABLE category_product (
 );
 
 /*--------CONSTANTS-------*/
+INSERT INTO currency(name, description)
+VALUES ('USD', 'USD');
+INSERT INTO currency(name, description)
+VALUES ('RUB', 'RUB');
+
 INSERT INTO role (name)
 VALUES ('ROLE_ADMIN');
 INSERT INTO role (name)
@@ -162,6 +167,6 @@ INSERT INTO category (name, description)
 VALUES ('Bestseller', 'Bestseller');
 
 INSERT INTO brand (name, description)
-VALUES ('NO_BRAND', 'NO_BRAND');
+VALUES ('No Brand', 'No Brand');
 
 COMMIT;

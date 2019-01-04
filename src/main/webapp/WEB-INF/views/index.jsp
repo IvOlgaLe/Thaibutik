@@ -111,7 +111,7 @@
     <div class="container">
         <!-- BEGIN CONTENT -->
         <div class="row margin-bottom-40">
-            <div class="col-md-9 col-sm-7">
+            <div class="col-md-12 col-sm-7">
 
                 <!-- BEGIN PRODUCT LIST -->
                 <div class="row product-list">

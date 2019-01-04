@@ -4,10 +4,10 @@
     <snap><h1>Bestsellers</h1></snap>
     <c:forEach var="product" items="${bestsellersList}">
         <!-- PRODUCT ITEM START -->
-        <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="product-item">
                 <div class="pi-img-wrapper">
-                    <img src="${imgPrefix}${product.imageSource}" class="img-responsive"
+                    <img src="${imgPrefix}/products/${product.imageSource}" class="img-responsive"
                          alt="${product.name}">
                 </div>
                 <h3>

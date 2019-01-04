@@ -9,5 +9,5 @@ public class Constants {
     public static final String CANCELLED = "Cancelled";
     public static final String USD = "USD";
     public static final String BESTSELLERS = "Bestsellers";
-    public static final String NO_BRAND = "No brand";
+    public static final String NO_BRAND = "No Brand";
 }

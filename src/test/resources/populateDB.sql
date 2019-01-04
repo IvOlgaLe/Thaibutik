@@ -144,6 +144,11 @@ CREATE TABLE category_product (
 );
 
 /*--------CONSTANTS-------*/
+INSERT INTO currency(name, description)
+VALUES ('USD', 'USD');
+INSERT INTO currency(name, description)
+VALUES ('RUB', 'RUB');
+
 INSERT INTO role (name)
 VALUES ('ROLE_ADMIN');
 INSERT INTO role (name)
@@ -162,7 +167,7 @@ INSERT INTO category (name, description)
 VALUES ('Bestsellers', 'Bestsellers');
 
 INSERT INTO brand (name, description)
-VALUES ('NO_BRAND', 'NO_BRAND');
+VALUES ('No Brand', 'No Brand');
 
 /*---------TEST DATA----------*/
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
@@ -189,7 +194,7 @@ INSERT INTO currency (name, description)
 VALUES ('USD', 'USD Description');
 
 INSERT INTO product (name, brand_id, image_source, description)
-VALUES ('Soap', 202, 'img01', 'Soap Description');         /*   201 - NO_BRAND*/
+VALUES ('Soap', 202, 'img01', 'Soap Description');         /*   201 - No Brand*/
 INSERT INTO product (name, brand_id, image_source, description)
 VALUES ('Shampoo', 203, 'img02', 'Shampoo Description');
 

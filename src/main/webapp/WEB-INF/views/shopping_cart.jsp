@@ -42,7 +42,7 @@
                                             <input name="itemId" type="hidden" value="${cartDetail.itemId}">
                                             <tr>
                                                 <td class="goods-page-image">
-                                                    <a href="${imgPrefix}${cartDetail.productImageSource}"><img
+                                                    <a href="${imgPrefix}/products/${cartDetail.productImageSource}"><img
                                                             src="${imgPrefix}${cartDetail.productImageSource}"
                                                             alt="${cartDetail.productName}"></a>
                                                 </td>

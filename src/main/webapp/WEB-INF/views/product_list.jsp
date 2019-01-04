@@ -27,7 +27,7 @@
 
         <!-- BEGIN CONTENT -->
         <div class="row margin-bottom-40">
-            <div class="col-md-9 col-sm-7">
+            <div class="col-md-12 col-sm-7">
                 <form action="${contextPath}/category/${category.id}">
                     <div class="row list-view-sorting clearfix">
                         <div class="col-md-10 col-sm-10">
@@ -74,7 +74,7 @@
                         <div class="col-md-4 col-sm-6 col-xs-12">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
-                                    <img src="${imgPrefix}${product.imageSource}" class="img-responsive"
+                                    <img src="${imgPrefix}/products/${product.imageSource}" class="img-responsive"
                                          alt="${product.name}">
                                 </div>
                                 <h3>
