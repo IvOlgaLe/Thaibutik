@@ -1,5 +1,5 @@
 <%@include file="links_top.jsp" %>
-<title>My account | ThaiButik</title>
+<title>Admin Dashboard | ThaiButik</title>
 
 </head>
 <!-- Head END -->
@@ -11,15 +11,11 @@
 <div class="main">
     <div class="container">
         <ul class="breadcrumb">
-            <li><a href="${contextPath}index">Home</a></li>
-            <li class="active">My Account Page</li>
+            <li><a href="index">Home</a></li>
+            <li class="active">Admin Dashboard</li>
         </ul>
-        <!-- BEGIN SIDEBAR & CONTENT -->
+        <!-- BEGIN CONTENT -->
         <div class="row margin-bottom-40">
-
-            <%@include file="sidebar.jsp" %>
-
-            <!-- BEGIN CONTENT -->
             <div class="col-md-9 col-sm-7">
                 <h1>Hi, ${sessUser.name}</h1>
                 <div class="content-page">
@@ -27,22 +23,17 @@
                     <ul>
                         <li><a href="${contextPath}/profileForm">Edit My Account Information</a></li>
                         <li><a href="${contextPath}/profilePassword">Change My Password</a></li>
-                        <li><a href="${contextPath}/shoppingCart">My Shopping Cart</a></li>
+                        <li><a href="${contextPath}/productTable">Products Table</a></li>
+                        <li><a href="${contextPath}/editProduct/0">Add Product</a></li>
+                        <li><a href="${contextPath}/orderTable">Orders Table</a></li>
                     </ul>
                     <hr>
-
-                    <h3>My Orders</h3>
-                    <ul>
-                        <li><a href="${contextPath}/myOrderList">View My Order History</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
-        <!-- END SIDEBAR & CONTENT -->
+        <!-- END CONTENT -->
     </div>
 </div>
-
-<%@include file="footer.jsp" %>
 
 <%@include file="links_bottom.jsp" %>
 

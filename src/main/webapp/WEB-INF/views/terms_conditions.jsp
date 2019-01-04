@@ -11,8 +11,7 @@
     <div class="main">
       <div class="container">
         <ul class="breadcrumb">
-            <li><a href="Index">Home</a></li>
-            <li><a href="">Store</a></li>
+            <li><a href="${contextPath}/index">Home</a></li>
             <li class="active">Terms &amp; Conditions</li>
         </ul>
         <!-- BEGIN SIDEBAR & CONTENT -->

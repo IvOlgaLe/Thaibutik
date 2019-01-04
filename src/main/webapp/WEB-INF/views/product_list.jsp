@@ -1,164 +1,107 @@
-  <%@include file="links_top.jsp"%>
-  <title>${category} | ThaiButik</title>
+<%@include file="links_top.jsp" %>
+<title>${category.name} | ThaiButik</title>
 
 </head>
 <!-- Head END -->
 
 <!-- Body BEGIN -->
 <body class="ecommerce">
-  <%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
-    <div class="title-wrapper">
-      <div class="container"><div class="container-inner">
-        <h1><span>SCINCARE</span> CATEGORY</h1>
-        <em>Over 400 Items are available here</em>
-      </div></div>
-    </div>
-
-    <div class="main">
-      <div class="container">
-        <ul class="breadcrumb">
-            <li><a href="Index">Home</a></li>
-            <li><a href="">Store</a></li>
-            <li class="active">Scincare category</li>
-        </ul>
-        <!-- BEGIN SIDEBAR & CONTENT -->
-        <div class="row margin-bottom-40">
-
-          <%@include file="sidebar.jsp"%>
-
-          <!-- BEGIN CONTENT -->
-          <div class="col-md-9 col-sm-7">
-            <div class="row list-view-sorting clearfix">
-              <div class="col-md-2 col-sm-2 list-view">
-                <a href="javascript:;"><i class="fa fa-th-large"></i></a>
-                <a href="javascript:;"><i class="fa fa-th-list"></i></a>
-              </div>
-              <div class="col-md-10 col-sm-10">
-                <div class="pull-right">
-                  <label class="control-label">Show:</label>
-                  <select class="form-control input-sm">
-                    <option value="#?limit=24" selected="selected">24</option>
-                    <option value="#?limit=25">25</option>
-                    <option value="#?limit=50">50</option>
-                    <option value="#?limit=75">75</option>
-                    <option value="#?limit=100">100</option>
-                  </select>
-                </div>
-                <div class="pull-right">
-                  <label class="control-label">Sort&nbsp;By:</label>
-                  <select class="form-control input-sm">
-                    <option value="#?sort=p.sort_order&amp;order=ASC" selected="selected">Default</option>
-                    <option value="#?sort=pd.name&amp;order=ASC">Name (A - Z)</option>
-                    <option value="#?sort=pd.name&amp;order=DESC">Name (Z - A)</option>
-                    <option value="#?sort=p.price&amp;order=ASC">Price (Low &gt; High)</option>
-                    <option value="#?sort=p.price&amp;order=DESC">Price (High &gt; Low)</option>
-                    <option value="#?sort=rating&amp;order=DESC">Rating (Highest)</option>
-                    <option value="#?sort=rating&amp;order=ASC">Rating (Lowest)</option>
-                    <option value="#?sort=p.model&amp;order=ASC">Model (A - Z)</option>
-                    <option value="#?sort=p.model&amp;order=DESC">Model (Z - A)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <!-- BEGIN PRODUCT LIST -->
-            <div class="row product-list">
-              <!-- PRODUCT ITEM START -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <div class="pi-img-wrapper">
-                    <img src="/resources/pages/img/products/model1.jpg" class="img-responsive" alt="Berry Lace Dress">
-                    <div>
-                      <a href="/resources/pages/img/products/model1.jpg" class="btn btn-default fancybox-button">Zoom</a>
-                      <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                    </div>
-                  </div>
-                  <h3><a href="product.jsp">Berry Lace Dress Berry Lace Dress</a></h3>
-                  <div class="pi-price">$29.00</div>
-                  <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
-                </div>
-              </div>
-              <!-- PRODUCT ITEM END -->
-              <!-- PRODUCT ITEM START -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <div class="pi-img-wrapper">
-                    <img src="/resources/pages/img/products/model2.jpg" class="img-responsive" alt="Berry Lace Dress">
-                    <div>
-                      <a href="/resources/pages/img/products/model2.jpg" class="btn btn-default fancybox-button">Zoom</a>
-                      <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                    </div>
-                  </div>
-                  <h3><a href="product.jsp">Berry Lace Dress</a></h3>
-                  <div class="pi-price">$29.00</div>
-                  <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
-                </div>
-              </div>
-              <!-- PRODUCT ITEM END -->
-              <!-- PRODUCT ITEM START -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <div class="pi-img-wrapper">
-                    <img src="/resources/pages/img/products/model6.jpg" class="img-responsive" alt="Berry Lace Dress">
-                    <div>
-                      <a href="/resources/pages/img/products/model6.jpg" class="btn btn-default fancybox-button">Zoom</a>
-                      <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                    </div>
-                  </div>
-                  <h3><a href="product.jsp">Berry Lace Dress 2</a></h3>
-                  <div class="pi-price">$29.00</div>
-                  <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
-                </div>
-              </div>              
-              <!-- PRODUCT ITEM END -->
-            </div>
-            <div class="row product-list">
-              <!-- PRODUCT ITEM START -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <div class="pi-img-wrapper">
-                    <img src="/resources/pages/img/products/model4.jpg" class="img-responsive" alt="Berry Lace Dress">
-                    <div>
-                        <a href="/resources/pages/img/products/model4.jpg" class="btn btn-default fancybox-button">Zoom</a>
-                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                    </div>
-                  </div>
-                  <h3><a href="product.jsp">Berry Lace Dress Berry Lace Dress</a></h3>
-                  <div class="pi-price">$29.00</div>
-                  <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
-                </div>
-              </div>
-              <!-- PRODUCT ITEM END -->
-            </div>
-            <!-- END PRODUCT LIST -->
-            <!-- BEGIN PAGINATOR -->
-            <div class="row">
-              <div class="col-md-4 col-sm-4 items-info">Items 1 to 9 of 10 total</div>
-              <div class="col-md-8 col-sm-8">
-                <ul class="pagination pull-right">
-                  <li><a href="javascript:;">&laquo;</a></li>
-                  <li><a href="javascript:;">1</a></li>
-                  <li><span>2</span></li>
-                  <li><a href="javascript:;">3</a></li>
-                  <li><a href="javascript:;">4</a></li>
-                  <li><a href="javascript:;">5</a></li>
-                  <li><a href="javascript:;">&raquo;</a></li>
-                </ul>
-              </div>
-            </div>
-            <!-- END PAGINATOR -->
-          </div>
-          <!-- END CONTENT -->
+<div class="title-wrapper">
+    <div class="container">
+        <div class="container-inner">
+            <h1><span>${category.name} category</span></h1>
+            <em>Over 400 Items are available here</em>
         </div>
-        <!-- END SIDEBAR & CONTENT -->
-      </div>
     </div>
+</div>
 
-  <%@include file="footer.jsp"%>
+<div class="main">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="${contextPath}/index">Home</a></li>
+            <li><a href="${contextPath}/catalog">Catalog</a></li>
+            <li class="active">${category.name} category</li>
+        </ul>
 
-  <%@include file="fast_view_product.jsp"%>
+        <!-- BEGIN CONTENT -->
+        <div class="row margin-bottom-40">
+            <div class="col-md-9 col-sm-7">
+                <form action="${contextPath}/category/${category.id}">
+                    <div class="row list-view-sorting clearfix">
+                        <div class="col-md-10 col-sm-10">
+                            <div class="pull-left">
+                                <label class="control-label">Show&nbsp;by&nbsp;price:</label>
+                                <div class="pull-left">
+                                    <input name="lowPrice" type="number" tabindex="1"/> -
+                                    <input name="highPrice" type="number" tabindex="2"/>
+                                </div>
+                            </div>
+                            <div class="pull-left">
+                                <label class="control-label">Sort&nbsp;By:</label>
+                                <select name="orderBy" class="form-control input-sm">
+                                    <option value="i.price*(1-i.discount/100)" selected="selected">Default</option>
+                                    <option value="p.name">Name (A - Z)</option>
+                                    <option value="p.name DESC">Name (Z - A)</option>
+                                    <option value="i.price*(1-i.discount/100)">Price (Low &gt; High)</option>
+                                    <option value="i.price*(1-i.discount/100) DESC">Price (High &gt; Low)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                            <div class="pull-left">
+                                <label class="control-label">Type:</label>
+                                <input name="itemType" type="text" tabindex="3"/>
+                            </div>
+                            <div class="pull-left">
+                                <label class="control-label">Size:</label>
+                                <input name="itemSize" type="text" tabindex="4"/>
+                            </div>
+                            <div class="pull-left">
+                                <input name="applyFilter" type="hidden" value="true"/>
+                                <input name="categoryId" type="hidden" value="${category.id}"/>
+                                <button class="btn btn-primary" type="submit">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-  <%@include file="links_bottom.jsp"%>
+                <!-- BEGIN PRODUCT LIST -->
+                <div class="row product-list">
+                    <c:forEach var="product" items="${productList}">
+                        <!-- PRODUCT ITEM START -->
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="${imgPrefix}${product.imageSource}" class="img-responsive"
+                                         alt="${product.name}">
+                                </div>
+                                <h3>
+                                    <a href="${contextPath}/product/${product.id}/0?categoryId=${category.id}">${product.name}</a>
+                                </h3>
+                                <div class="pi-price">$ <fmt:formatNumber type="number" maxFractionDigits="2"
+                                                                          value="${product.itemList.get(0).price*(1-product.itemList.get(0).discount/100)}"/></div>
+                                <c:if test="${product.itemList.get(0).discount > 0}">
+                                    <em><span> (was $${product.itemList.get(0).price})</span></em>
+                                </c:if>
+                            </div>
+                        </div>
+                        <!-- PRODUCT ITEM END -->
+                    </c:forEach>
+                </div>
+                <!-- END PRODUCT LIST -->
+
+                <%@include file="bestsellers.jsp" %>
+            </div>
+        </div>
+        <!-- END CONTENT -->
+    </div>
+</div>
+
+<%@include file="footer.jsp" %>
+
+<%@include file="links_bottom.jsp" %>
 
 </body>
 <!-- END BODY -->
