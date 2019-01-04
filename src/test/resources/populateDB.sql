@@ -18,6 +18,21 @@ CREATE TABLE category (
   CONSTRAINT pk_category PRIMARY KEY (id)
 );
 
+CREATE TABLE groups (
+  id          NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 51 INCREMENT BY 1)     NOT NULL,
+  name        VARCHAR2(255)                                                           NOT NULL,
+  description VARCHAR2(255),
+  CONSTRAINT pk_group PRIMARY KEY (id)
+);
+
+CREATE TABLE group_category (
+  group_id    NUMERIC NOT NULL,
+  category_id NUMERIC NOT NULL,
+  CONSTRAINT pk_gc PRIMARY KEY (group_id, category_id),
+  CONSTRAINT fk_gc_group FOREIGN KEY (group_id) REFERENCES groups (id),
+  CONSTRAINT fk_gc_category FOREIGN KEY (category_id) REFERENCES category (id)
+);
+
 CREATE TABLE brand (
   id          NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 201 INCREMENT BY 1)   NOT NULL,
   name        VARCHAR2(255)                                                          NOT NULL,
@@ -72,15 +87,16 @@ CREATE TABLE order_state (
 );
 
 CREATE TABLE orders (
-  id                NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1) NOT NULL,
-  user_id           NUMERIC                                                                NOT NULL,
-  order_date        DATE                                                                   NOT NULL,
-  total_price       NUMBER(5, 2)                                                           NOT NULL,
-  currency_id       NUMERIC                                                                NOT NULL,
-  delivery_date     DATE,
-  delivery_address  VARCHAR2(255),
-  delivery_info     VARCHAR2(255),
-  order_state_id    NUMERIC                                                                NOT NULL,
+  id               NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1) NOT NULL,
+  user_id          NUMERIC                                                                NOT NULL,
+  order_date       DATE                                                                   NOT NULL,
+  total_price      NUMBER(10, 2)                                                          NOT NULL,
+  total_quantity   NUMERIC                                                                NOT NULL,
+  currency_id      NUMERIC                                                                NOT NULL,
+  delivery_date    DATE,
+  delivery_address VARCHAR2(255),
+  delivery_info    VARCHAR2(255),
+  order_state_id   NUMERIC                                                                NOT NULL,
   CONSTRAINT pk_orders PRIMARY KEY (id),
   CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_orders_curr FOREIGN KEY (currency_id) REFERENCES currency (id),
@@ -88,12 +104,11 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE order_detail (
-  order_id    NUMERIC      NOT NULL,
-  item_id     NUMERIC      NOT NULL,
-  quantity    NUMERIC,
-  price       NUMBER(5, 2) NOT NULL,
-  currency_id NUMERIC      NOT NULL,
-  discount    NUMBER(5, 2),
+  order_id    NUMERIC       NOT NULL,
+  item_id     NUMERIC       NOT NULL,
+  quantity    NUMERIC       NOT NULL,
+  price       NUMBER(10, 2) NOT NULL,
+  currency_id NUMERIC       NOT NULL,
   CONSTRAINT pk_ordersdet PRIMARY KEY (order_id, item_id),
   CONSTRAINT fk_ordersdet_order FOREIGN KEY (order_id) REFERENCES orders (id),
   CONSTRAINT fk_ordersdet_item FOREIGN KEY (item_id) REFERENCES item (id),
@@ -101,13 +116,13 @@ CREATE TABLE order_detail (
 );
 
 CREATE TABLE cart (
-  id          NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1)    NOT NULL,
-  user_id     NUMERIC,
-  total_price NUMBER(5, 2)                                                              NOT NULL,
-  currency_id NUMERIC                                                                   NOT NULL,
-  cart_date   DATE                                                                      NOT NULL,
+  id             NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 10001 INCREMENT BY 1)    NOT NULL,
+  user_id        NUMERIC,
+  total_price    NUMBER(10, 2)                                                             NOT NULL,
+  total_quantity NUMERIC                                                                   NOT NULL,
+  currency_id    NUMERIC                                                                   NOT NULL,
+  cart_date      DATE                                                                      NOT NULL,
   CONSTRAINT pk_cart PRIMARY KEY (id),
-  CONSTRAINT fk_cart_user FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_cart_curr FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
 
@@ -128,26 +143,7 @@ CREATE TABLE category_product (
   CONSTRAINT fk_pc_categ FOREIGN KEY (category_id) REFERENCES category (id)
 );
 
-CREATE TABLE loves (
-  user_id    NUMERIC NOT NULL,
-  product_id NUMERIC NOT NULL,
-  CONSTRAINT pk_loves PRIMARY KEY (user_id, product_id),
-  CONSTRAINT fk_loves_user FOREIGN KEY (user_id) REFERENCES users (id),
-  CONSTRAINT fk_loves_product FOREIGN KEY (product_id) REFERENCES product (id)
-);
-
-CREATE TABLE review (
-  id          NUMERIC GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
-  product_id  NUMERIC                                                            NOT NULL,
-  user_id     NUMERIC                                                            NOT NULL,
-  review_date DATE,
-  rating      NUMERIC,
-  review_text VARCHAR2(1023),
-  CONSTRAINT pk_rev PRIMARY KEY (id),
-  CONSTRAINT fk_rev_user FOREIGN KEY (user_id) REFERENCES users (id),
-  CONSTRAINT fk_rev_product FOREIGN KEY (product_id) REFERENCES product (id)
-);
-
+/*--------CONSTANTS-------*/
 INSERT INTO role (name)
 VALUES ('ROLE_ADMIN');
 INSERT INTO role (name)
@@ -157,21 +153,28 @@ VALUES ('ROLE_USER');
 
 INSERT INTO order_state (name)
 VALUES ('PROCESSING');
-INSERT INTO role (name)
+INSERT INTO order_state (name)
 VALUES ('DELIVERED');
-INSERT INTO role (name)
+INSERT INTO order_state (name)
 VALUES ('CANCELLED');
 
+INSERT INTO category (name, description)
+VALUES ('Bestsellers', 'Bestsellers');
+
+INSERT INTO brand (name, description)
+VALUES ('NO_BRAND', 'NO_BRAND');
+
+/*---------TEST DATA----------*/
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
-VALUES ('Cristina White', 'cristina@gmail.com', '111', 1, NULL, NULL, NULL);
+VALUES ('Cristina White', 'cristina@gmail.com', '1Aa@', 1, NULL, NULL, NULL);
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
-VALUES ('Stuart Little', 'stuart@gmail.com', '222', 2, NULL, NULL, NULL);
+VALUES ('Stuart Little', 'stuart@gmail.com', '2Aa@', 2, NULL, NULL, NULL);
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
-VALUES ('Ben Black', 'ben@gmail.com', '333', 3, NULL, NULL, NULL);
+VALUES ('Ben Black', 'ben@gmail.com', '3Aa@', 3, NULL, NULL, NULL);
 INSERT INTO users (name, email, password, role_id, address, phone, birthday)
 VALUES ('Emily Orange',
         'emily@gmail.com',
-        '444',
+        '4Aa@',
         3,
         '145 Ocean St., Brooklyn, NY, 11256',
         '277-159-2565',
@@ -186,9 +189,9 @@ INSERT INTO currency (name, description)
 VALUES ('USD', 'USD Description');
 
 INSERT INTO product (name, brand_id, image_source, description)
-VALUES ('Soap', 201, 'img01', 'Soap Description');
+VALUES ('Soap', 202, 'img01', 'Soap Description');         /*   201 - NO_BRAND*/
 INSERT INTO product (name, brand_id, image_source, description)
-VALUES ('Shampoo', 202, 'img02', 'Shampoo Description');
+VALUES ('Shampoo', 203, 'img02', 'Shampoo Description');
 
 INSERT INTO item (product_id,
                   price,
@@ -218,9 +221,50 @@ VALUES ('Bath', 'Bath Description');
 INSERT INTO category (name, description)
 VALUES ('Body', 'Body Description');
 
+INSERT INTO groups (name, description)
+VALUES ('Bath/Body', 'Bath/Body Description');
+
+INSERT INTO group_category (group_id, category_id)
+VALUES (51, 102);
+INSERT INTO group_category (group_id, category_id)
+VALUES (51, 103);
+
 INSERT INTO category_product (product_id, category_id)
 VALUES (100001, 101);
 INSERT INTO category_product (product_id, category_id)
 VALUES (100001, 102);
+INSERT INTO category_product (product_id, category_id)
+VALUES (100001, 103);
+
+INSERT INTO orders (user_id,
+                    order_date,
+                    total_price,
+                    total_quantity,
+                    currency_id,
+                    delivery_date,
+                    delivery_address,
+                    delivery_info,
+                    order_state_id)
+VALUES (1001, to_date('18 DEC 2018'), 30.0, 2, 11, to_date('18 DEC 2018'), '145 Main Ave', null, 1);
+INSERT INTO orders (user_id,
+                    order_date,
+                    total_price,
+                    total_quantity,
+                    currency_id,
+                    delivery_date,
+                    delivery_address,
+                    delivery_info,
+                    order_state_id)
+VALUES (1001, to_date('20 DEC 2018'), 9.0, 1, 11, to_date('21 DEC 2018'), '145 Main Ave', 'Second Order', 1);
+
+INSERT INTO order_detail (order_id, item_id, quantity, price, currency_id)
+VALUES (10001, 1000001, 2, 15.0, 11);
+INSERT INTO order_detail (order_id, item_id, quantity, price, currency_id)
+VALUES (10002, 1000002, 1, 9.0, 11);
+
+INSERT INTO cart (user_id, total_price, total_quantity, currency_id, cart_date)
+VALUES (1001, 37.56, 2, 11, to_date('17 NOV 2018'));
+INSERT INTO cart_detail (cart_id, item_id, quantity)
+VALUES (10001, 1000001, 2);
 
 COMMIT;

@@ -7,7 +7,6 @@ import com.myapp.model.OrderState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,7 +21,7 @@ import java.util.*;
 
 @Repository
 public class OrderDAO extends BaseDAO implements OrderDAOI {
-    private static final BeanPropertyRowMapper<Order> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Order.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -58,6 +57,7 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
                 order.setUserId(rs.getInt("user_id"));
                 order.setOrderDate(rs.getDate("order_date"));
                 order.setTotalPrice(rs.getBigDecimal("total_price"));
+                order.setTotalQuantity(rs.getInt("total_quantity"));
                 order.setCurrencyId(rs.getInt("currency_id"));
                 order.setDeliveryDate(rs.getDate("delivery_date"));
                 order.setDeliveryInfo(rs.getString("delivery_info"));
@@ -70,7 +70,7 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
                 order.setOrderState(orderState);
                 map.put(order_id, order);
 
-                List orderDetailList = order.getOrderDetailList();
+                List<OrderDetail> orderDetailList = order.getOrderDetailList();
                 if (orderDetailList == null) {
                     orderDetailList = new ArrayList<OrderDetail>();
                 }
@@ -83,11 +83,9 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
                 orderDetail.setItemType(rs.getString("item_type"));
                 orderDetail.setItemSize(rs.getString("item_size"));
                 orderDetail.setQuantity(rs.getInt("quantity"));
-                orderDetail.setDiscount(rs.getInt("discount"));
                 orderDetail.setPrice(rs.getBigDecimal("price"));
-                orderDetail.setCurrencyId(rs.getInt("currency_id"));
+                orderDetail.setCurrencyId(rs.getInt("item_currency_id"));
                 orderDetail.setProductImageSource(rs.getString("product_image_source"));
-                orderDetail.setItemImageSource(rs.getString("item_image_source"));
                 orderDetailList.add(orderDetail);
                 order.setOrderDetailList(orderDetailList);
             }
@@ -104,6 +102,7 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
                 .addValue("user_id", order.getUserId())
                 .addValue("order_date", order.getOrderDate())
                 .addValue("total_price", order.getTotalPrice())
+                .addValue("total_quantity", order.getTotalQuantity())
                 .addValue("delivery_date", order.getDeliveryDate())
                 .addValue("delivery_address", order.getDeliveryAddress())
                 .addValue("delivery_info", order.getDeliveryInfo())
@@ -126,7 +125,6 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
 
     @Override
     public List<Order> getAllOrders() {
-        //  return jdbcTemplate.query(SQL.GET_ALL_ORDERS.getQuery(), ROW_MAPPER);
         return (List<Order>) jdbcTemplate.query(SQL.GET_ORDER_BY_PARAM.getQuery(), MY_OBJECT_EXTRACTOR);
     }
 
@@ -144,9 +142,9 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
             query = query + SQL.PARAM_USER_ID.getQuery();
             argsList.add(param.get("userId"));
         }
-        if (param.get("oStateId") != null) {
+        if (param.get("orderStateId") != null) {
             query = query + SQL.PARAM_OSTATE_ID.getQuery();
-            argsList.add(param.get("oStateId"));
+            argsList.add(param.get("orderStateId"));
         }
         if (param.get("beginOrderDate") != null) {
             query = query + SQL.PARAM_ORDER_DATE.getQuery();
@@ -158,14 +156,18 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
             argsList.add(param.get("beginDeliveryDate"));
             argsList.add(param.get("endDeliveryDate"));
         }
+        if (param.get("lowTotalPrice") != null) {
+            query = query + SQL.PARAM_LOW_TOTAL_PRICE.getQuery();
+            argsList.add(param.get("lowTotalPrice"));
+        }
+        if (param.get("highTotalPrice") != null) {
+            query = query + SQL.PARAM_HIGH_TOTAL_PRICE.getQuery();
+            argsList.add(param.get("highTotalPrice"));
+        }
         if (param.get("orderBy") != null) {
             query = query + "ORDER BY " + param.get("orderBy");
-        } else if (param.get("orderByDesc") != null) {
-            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
         }
         Object[] args = argsList.toArray();
         return (List<Order>) jdbcTemplate.query(query, MY_OBJECT_EXTRACTOR, args);
     }
-
-
 }

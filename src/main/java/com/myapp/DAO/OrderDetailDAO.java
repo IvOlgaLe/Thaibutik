@@ -45,8 +45,7 @@ public class OrderDetailDAO extends BaseDAO implements OrderDetailDAOI {
                 .addValue("item_id", orderDetail.getItemId())
                 .addValue("price", orderDetail.getPrice())
                 .addValue("quantity", orderDetail.getQuantity())
-                .addValue("currency_id", orderDetail.getCurrencyId())
-                .addValue("discount", orderDetail.getDiscount());
+                .addValue("currency_id", orderDetail.getCurrencyId());
 
         if (getOrderDetailById(orderDetail.getOrderId(), orderDetail.getItemId()) == null) {
             insertOrderDetail.execute(map);
@@ -78,7 +77,7 @@ public class OrderDetailDAO extends BaseDAO implements OrderDetailDAOI {
     }
 
     @Override
-    public List<OrderDetail> getOrderDetailsByParam(Map<String, String> param) {
+    public List<OrderDetail> getOrderDetailsByParam(Map<String, Object> param) {
         String query = SQL.GET_ODETAIL_BY_PARAM.getQuery();
         List<Object> argsList = new ArrayList<>();
         if (param.get("orderId") != null) {
@@ -91,8 +90,6 @@ public class OrderDetailDAO extends BaseDAO implements OrderDetailDAOI {
         }
         if (param.get("orderBy") != null) {
             query = query + "ORDER BY " + param.get("orderBy");
-        } else if (param.get("orderByDesc") != null) {
-            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
         }
         Object[] args = argsList.toArray();
         return jdbcTemplate.query(query, ROW_MAPPER, args);

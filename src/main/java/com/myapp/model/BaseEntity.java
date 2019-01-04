@@ -1,7 +1,6 @@
 package com.myapp.model;
 
 public abstract class BaseEntity {
-   // public static final int START_SEQ = 100000;
 
     protected Integer id;
 

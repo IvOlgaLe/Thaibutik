@@ -1,23 +1,25 @@
 package com.myapp.controller;
 
-import com.myapp.cache.MemoryCache;
 import com.myapp.enums.Constants;
 import com.myapp.model.User;
+import com.myapp.service.CartService;
 import com.myapp.service.UserService;
 import com.myapp.utils.SendEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController extends BaseController {
@@ -25,76 +27,87 @@ public class UserController extends BaseController {
     @Autowired
     UserService userService;
 
- /*   @Autowired
-    MessageSource message;*/
+    @Autowired
+    CartService cartService;
 
-    @RequestMapping(value = "Login", method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public ModelAndView login(@ModelAttribute("user") User user) {
         return new ModelAndView("login");
     }
 
     @RequestMapping("processLogout")
-    public ModelAndView processLogout(HttpServletRequest request) {
+    public String processLogout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
             session = null;
         }
-        return new ModelAndView("index");
+        return "redirect:/";
     }
 
     @RequestMapping("processLogin")
-    public ModelAndView processLogin(@ModelAttribute("user") User user, HttpServletRequest request) {
+    public String processLogin(@ModelAttribute("user") User user, HttpServletRequest request, RedirectAttributes redir) {
+        List<Exception> exceptionList = new ArrayList<>();
         HttpSession session = request.getSession();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         user = userService.validateUser(email, password);
         if (user != null) {
+            if(userService.checkAdminPrivilege(user)) {
+                session.setAttribute("adminFlag", true);
+            }
             session.setAttribute("sessUser", user);
+            session.setAttribute("cart", cartService.mergeLoginUserCarts(session, exceptionList));
         } else {
-            request.setAttribute("errorMessage", "Wrong credentials");
-            request.setAttribute("email", email);
-            return new ModelAndView("login");
+            redir.addFlashAttribute("errorLoginMessage", "Wrong credentials");
+            redir.addFlashAttribute("email", email);
+            return "redirect:/login";
         }
-        return new ModelAndView("index");
+        return "redirect:/index";
     }
-
-/*    @RequestMapping(value = "register", method = RequestMethod.GET)
-    public ModelAndView register(@ModelAttribute("user") User user) {
-        return new ModelAndView("register", "user", user);
-    }*/
-
 
     @Transactional
     @RequestMapping(value = "processRegister", method = RequestMethod.POST)
-    public ModelAndView processRegister(@ModelAttribute("user") @Valid User user, BindingResult result, HttpServletRequest request) {
+    public String processRegister(@ModelAttribute("user") @Valid User user, BindingResult result, HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (!result.hasErrors()) {
-            int roleId = 1;//cacheManager.getEnumIdByName(MemoryCache.ROLE.getName(), Constants.ROLE_USER);
+            //if user is registered with that email
+            if (userService.getUserByEmail(user.getEmail()) != null) {
+                request.setAttribute("errorRegisterMessage", "User with email " + user.getEmail() + " is registered");
+                request.setAttribute("email", user.getEmail());
+                return "forward:/login";
+            }
+           // int roleId = cacheManager.getEnumIdByName(MemoryCache.ROLE.getName(), Constants.ROLE_USER);
+            int roleId = userService.getRoleByName(Constants.ROLE_USER).getId();
             if (roleId != 0) {
                 user.setRoleId(roleId);
                 userService.saveUser(user);
                 session.setAttribute("sessUser", user);
-                return new ModelAndView("index");
+                return "redirect:/index";
             }
-            return new ModelAndView("error_page");
+            return "redirect:/index";
         } else {
-            return new ModelAndView("login");
+            return "forward:/login";
         }
     }
 
-    @RequestMapping(value = "MyAccount", method = RequestMethod.GET)
+    @RequestMapping(value = "adminDashboard", method = RequestMethod.GET)
+    public ModelAndView adminDashboard() {
+        return new ModelAndView("admin_dashboard");
+    }
+
+    @RequestMapping(value = "myAccount", method = RequestMethod.GET)
     public ModelAndView myAccountPage(@ModelAttribute("user") User user) {
         return new ModelAndView("my_account");
     }
 
-    @RequestMapping(value = "ProfileForm", method = RequestMethod.GET)
+    @RequestMapping(value = "profileForm", method = RequestMethod.GET)
     public ModelAndView profileFormPage(@ModelAttribute("user") User user) {
         return new ModelAndView("profile_form");
     }
 
-    @RequestMapping(value = "ProfilePassword", method = RequestMethod.GET)
+    @RequestMapping(value = "profilePassword", method = RequestMethod.GET)
     public ModelAndView profilePasswordPage(@ModelAttribute("user") User user) {
         return new ModelAndView("profile_password");
     }
@@ -132,7 +145,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "PasswordRestore", method = RequestMethod.GET)
+    @RequestMapping(value = "passwordRestore", method = RequestMethod.GET)
     public ModelAndView passwordRestore(HttpServletRequest request) {
         // return new ModelAndView("password_restore");
         return new ModelAndView("password_restore");

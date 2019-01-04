@@ -50,7 +50,7 @@ public class ItemDAO extends BaseDAO implements ItemDAOI {
                 .addValue("quant_ordered", item.getQuantOrdered())
                 .addValue("image_source", item.getImageSource())
                 .addValue("discount", item.getDiscount())
-                .addValue("available", item.isAvailable());
+                .addValue("available", item.getAvailable());
 
         if (item.isNew()) {
             Number newKey = insertItem.executeAndReturnKey(map);

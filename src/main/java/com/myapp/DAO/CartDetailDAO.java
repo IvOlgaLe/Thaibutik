@@ -9,12 +9,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
+
     private static final BeanPropertyRowMapper<CartDetail> ROW_MAPPER = BeanPropertyRowMapper.newInstance(CartDetail.class);
 
     private final JdbcTemplate jdbcTemplate;
@@ -36,11 +40,10 @@ public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
     public CartDetail saveCartDetail(CartDetail cartDetail) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("cart_id", cartDetail.getCartId())
-                .addValue("item_id", cartDetail.getItem().getId())
-                .addValue("quantity", cartDetail.getQuantity())
-                ;
+                .addValue("item_id", cartDetail.getItemId())
+                .addValue("quantity", cartDetail.getQuantity());
 
-        if (getCartDetailById(cartDetail.getCartId(), cartDetail.getItem().getId()) == null) {
+        if (getCartDetailById(cartDetail.getCartId(), cartDetail.getItemId()) == null) {
             insertCartDetail.execute(map);
         } else {
             namedParameterJdbcTemplate.update(CartDetailDAOI.SQL.UPDATE_CDETAIL_BY_ID.getQuery(), map);
@@ -54,28 +57,42 @@ public class CartDetailDAO extends BaseDAO implements CartDetailDAOI {
     }
 
     @Override
+    public boolean deleteCartDetailByCartId(int cartId) {
+        return jdbcTemplate.update(SQL.DELETE_CDETAIL_BY_CART_ID.getQuery(), cartId) != 0;
+    }
+
+    @Override
+    public boolean deleteCartDetailByItemId(int itemId) {
+        return jdbcTemplate.update(SQL.DELETE_CDETAIL_BY_ITEM_ID.getQuery(), itemId) != 0;
+    }
+
+    @Override
     public CartDetail getCartDetailById(int cartId, int itemId) {
         List<CartDetail> cartDetails = jdbcTemplate.query(SQL.GET_CDETAIL_BY_ID.getQuery(), ROW_MAPPER, cartId, itemId);
         return DataAccessUtils.singleResult(cartDetails);
     }
 
     @Override
-    public List<CartDetail> getCartDetailByCartId(int cartId) {
-        return jdbcTemplate.query(SQL.GET_CDETAIL_BY_CART_ID.getQuery(), ROW_MAPPER, cartId);
-    }
-    @Override
-    public List<CartDetail> getCartDetailByItemId(int itemId) {
-        return jdbcTemplate.query(SQL.GET_CDETAIL_BY_ITEM_ID.getQuery(), ROW_MAPPER, itemId);
+    public List<CartDetail> getAllCartDetails() {
+        return jdbcTemplate.query(SQL.GET_CDETAIL_BY_PARAM.getQuery(), ROW_MAPPER);
     }
 
     @Override
     public List<CartDetail> getCartDetailsByParam(Map<String, String> param) {
-        return null;
+        String query = SQL.GET_CDETAIL_BY_PARAM.getQuery();
+        List<Object> argsList = new ArrayList<>();
+        if (param.get("cartId") != null) {
+            query = query + SQL.PARAM_CART_ID.getQuery();
+            argsList.add(param.get("cartId"));
+        }
+        if (param.get("itemId") != null) {
+            query = query + SQL.PARAM_ITEM_ID.getQuery();
+            argsList.add(param.get("itemId"));
+        }
+        if (param.get("orderBy") != null) {
+            query = query + "ORDER BY " + param.get("orderBy");
+        }
+        Object[] args = argsList.toArray();
+        return jdbcTemplate.query(query, ROW_MAPPER, args);
     }
-
-    @Override
-    public List<CartDetail> getAllCartDetails() {
-        return jdbcTemplate.query(SQL.GET_ALL_CDETAILS.getQuery(), ROW_MAPPER);
-    }
-
 }

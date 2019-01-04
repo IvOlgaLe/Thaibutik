@@ -2,6 +2,7 @@ package com.myapp.service;
 
 import com.myapp.DAO.RoleDAO;
 import com.myapp.DAO.UserDAO;
+import com.myapp.enums.Constants;
 import com.myapp.model.Role;
 import com.myapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ public class UserService {
     }
 
     public boolean deleteUserById(int userId) {
-
         return userDAO.deleteUserById(userId);
     }
 
@@ -68,5 +68,10 @@ public class UserService {
 
     public Role getRoleById(int id) {
         return roleDAO.getRoleById(id);
+    }
+
+    public boolean checkAdminPrivilege(User user) {
+        return user.getRoleId() == getRoleByName(Constants.ROLE_ADMIN).getId() ||
+                user.getRoleId() == getRoleByName(Constants.ROLE_MODERATOR).getId();
     }
 }

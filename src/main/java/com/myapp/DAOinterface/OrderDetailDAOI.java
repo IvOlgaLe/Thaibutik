@@ -9,15 +9,15 @@ import java.util.Map;
 public interface OrderDetailDAOI {
     enum SQL {
         UPDATE_ODETAIL_BY_ID("UPDATE order_detail SET order_id=:order_id, item_id=:item_id, price=:price, currency_id=:currency_id, " +
-                "quantity=:quantity, discount=:discount WHERE order_id=:order_id AND item_id=:item_id"),
+                "quantity=:quantity WHERE order_id=:order_id AND item_id=:item_id"),
         DELETE_ODETAIL_BY_ORDER_ID("DELETE FROM order_detail WHERE order_id = ?"),
         DELETE_ODETAIL_BY_ID("DELETE FROM order_detail WHERE order_id = ? AND item_id = ?"),
         GET_ODETAIL_BY_ID(
                 "SELECT od.order_id AS order_id, od.item_id AS item_id, od.currency_id AS currency_id, " +
                         "i.product_id AS product_id, p.name AS product_name, b.name AS brand_name, " +
-                        "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, od.discount AS discount, " +
+                        "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, " +
                         "i.item_type AS item_type, i.item_size AS item_size, " +
-                        "i.image_source AS item_image_source, p.image_source AS product_image_source " +
+                        "p.image_source AS product_image_source " +
                         "FROM order_detail od " +
                         "JOIN item i ON od.item_id = i.id " +
                         "JOIN product p ON i.product_id = p.id " +
@@ -26,9 +26,9 @@ public interface OrderDetailDAOI {
         GET_ODETAIL_BY_PARAM(
                 "SELECT od.order_id AS order_id, od.item_id AS item_id, od.currency_id AS currency_id, " +
                         "i.product_id AS product_id, p.name AS product_name, b.name AS brand_name, " +
-                        "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, od.discount AS discount, " +
+                        "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, " +
                         "i.item_type AS item_type, i.item_size AS item_size, " +
-                        "i.image_source AS item_image_source, p.image_source AS product_image_source " +
+                        "p.image_source AS product_image_source " +
                         "FROM order_detail od " +
                         "JOIN item i ON od.item_id = i.id " +
                         "JOIN product p ON i.product_id = p.id " +
@@ -59,7 +59,7 @@ public interface OrderDetailDAOI {
 
     OrderDetail getOrderDetailById(int orderId, int itemId);
 
-    List<OrderDetail> getOrderDetailsByParam(Map<String, String> param);
+    List<OrderDetail> getOrderDetailsByParam(Map<String, Object> param);
 
     List<OrderDetail> getAllOrderDetails();
 }

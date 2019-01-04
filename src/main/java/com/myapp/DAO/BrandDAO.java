@@ -63,9 +63,8 @@ public class BrandDAO implements BrandDAOI {
     }
 
     @Override
-    public Brand getBrandByName(String name) {
-        List<Brand> brands = jdbcTemplate.query(SQL.GET_BRAND_BY_NAME.getQuery(), ROW_MAPPER, name);
-        return DataAccessUtils.singleResult(brands);
+    public List<Brand> getBrandByName(String name) {
+        return jdbcTemplate.query(SQL.GET_BRAND_BY_NAME.getQuery(), ROW_MAPPER, name);
     }
 
     @Override

@@ -10,6 +10,7 @@ public class Order extends BaseEntity{
     private int userId;
     private Date orderDate;
     private BigDecimal totalPrice;
+    private int totalQuantity;
     private int currencyId;
     private Date deliveryDate;
     private String deliveryInfo;
@@ -19,11 +20,12 @@ public class Order extends BaseEntity{
 
     public Order() {}
 
-    public Order( int userId, Date orderDate, BigDecimal totalPrice, int currencyId, Date deliveryDate,
+    public Order( int userId, Date orderDate, BigDecimal totalPrice, int totalQuantity, int currencyId, Date deliveryDate,
                  String deliveryInfo, OrderState orderState, String deliveryAddress, List<OrderDetail> orderDetailList) {
         this.userId = userId;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
+        this.totalQuantity = totalQuantity;
         this.currencyId = currencyId;
         this.deliveryDate = deliveryDate;
         this.deliveryInfo = deliveryInfo;
@@ -32,12 +34,13 @@ public class Order extends BaseEntity{
         this.orderDetailList = orderDetailList;
     }
 
-    public Order(Integer id, int userId, Date orderDate, BigDecimal totalPrice, int currencyId, Date deliveryDate,
+    public Order(Integer id, int userId, Date orderDate, BigDecimal totalPrice,int totalQuantity, int currencyId, Date deliveryDate,
                  String deliveryInfo, OrderState orderState, String deliveryAddress, List<OrderDetail> orderDetailList) {
         super(id);
         this.userId = userId;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
+        this.totalQuantity = totalQuantity;
         this.currencyId = currencyId;
         this.deliveryDate = deliveryDate;
         this.deliveryInfo = deliveryInfo;
@@ -68,6 +71,14 @@ public class Order extends BaseEntity{
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 
     public int getCurrencyId() {
@@ -124,19 +135,20 @@ public class Order extends BaseEntity{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Order order = (Order) o;
-        return (userId == order.userId &&
+        return userId == order.userId &&
                 currencyId == order.currencyId &&
                 orderDate.compareTo(order.orderDate) == 0 &&
                 totalPrice.compareTo(order.totalPrice) == 0 &&
+                totalQuantity == order.totalQuantity &&
                 (deliveryDate.compareTo(order.deliveryDate) == 0 || (deliveryDate == null && order.deliveryDate == null)) &&
                 (Objects.equals(deliveryAddress, order.deliveryAddress) || (deliveryAddress == null && order.deliveryAddress == null))&&
                 (Objects.equals(deliveryInfo, order.deliveryInfo) || (deliveryInfo == null && order.deliveryInfo == null))&&
                 Objects.equals(orderState, order.orderState) &&
-                Objects.equals(orderDetailList.size(), order.orderDetailList.size())) ;
+                Objects.equals(orderDetailList.size(), order.orderDetailList.size()) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), userId, orderDate, totalPrice, currencyId, deliveryDate, deliveryInfo, orderState, deliveryAddress, orderDetailList);
+        return Objects.hash(super.hashCode(), userId, orderDate, totalPrice, totalQuantity, currencyId, deliveryDate, deliveryInfo, orderState, deliveryAddress, orderDetailList);
     }
 }

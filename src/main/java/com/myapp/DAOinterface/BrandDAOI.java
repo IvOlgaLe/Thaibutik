@@ -29,7 +29,7 @@ public interface BrandDAOI {
 
     public boolean deleteBrandById(int id);
 
-    Brand getBrandByName(String name);
+    List<Brand> getBrandByName(String name);
 
     public List<Brand> getAllBrands();
 }

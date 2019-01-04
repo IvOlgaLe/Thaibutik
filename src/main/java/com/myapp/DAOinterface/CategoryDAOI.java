@@ -13,6 +13,9 @@ public interface CategoryDAOI {
                 "WHERE cp.product_id = ?"),
         GET_CATEGORY_BY_NAME("SELECT * FROM category WHERE name LIKE ?"),
         GET_ALL_CATEGORIES("SELECT * FROM category"),
+        DELETE_CATEGORY_PRODUCT_BY_ID("DELETE FROM category_product WHERE category_id = ? AND product_id = ?"),
+        DELETE_CATEGORY_PRODUCT_BY_PRODUCT_ID("DELETE FROM category_product WHERE product_id = ?"),
+        DELETE_CATEGORY_PRODUCT_BY_CATEGORY_ID("DELETE FROM category_product WHERE category_id = ?"),
         DELETE_CATEGORY_BY_ID("DELETE FROM category WHERE id = ?");
 
         private final String query;

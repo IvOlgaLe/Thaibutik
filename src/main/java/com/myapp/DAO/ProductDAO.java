@@ -7,17 +7,14 @@ import com.myapp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -69,9 +66,9 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
                 product.setBrand(brand);
                 map.put(product_id, product);
 
-                List itemList = product.getItemList();
+                List<Item> itemList = product.getItemList();
                 if (itemList == null) {
-                    itemList = new ArrayList<Item>();
+                    itemList = new ArrayList<>();
                 }
                 Item item = new Item();
                 item.setId(rs.getInt("item_id"));
@@ -82,7 +79,7 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
                 item.setPrice(rs.getBigDecimal("price"));
                 item.setItemType(rs.getString("item_type"));
                 item.setItemSize(rs.getString("item_size"));
-                item.setImageSource(rs.getString("image_source"));
+                item.setImageSource(rs.getString("item_image_source"));
                 item.setAvailable(rs.getBoolean("available"));
                 itemList.add(item);
                 product.setItemList(itemList);
@@ -124,6 +121,11 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
     }
 
     @Override
+    public List<Product> getProductByCategoryId(int categoryId) {
+        return (List<Product>) jdbcTemplate.query(SQL.GET_PRODUCT_BY_CAT_PARAM.getQuery(), MY_OBJECT_EXTRACTOR, categoryId);
+    }
+
+    @Override
     public List<Product> getProductByParam(Map<String, Object> param) {
         String query;
         List<Object> argsList = new ArrayList<>();
@@ -159,8 +161,6 @@ public class ProductDAO extends BaseDAO implements ProductDAOI {
         }
         if (param.get("orderBy") != null) {
             query = query + "ORDER BY " + param.get("orderBy");
-        } else if (param.get("orderByDesc") != null) {
-            query = query + "ORDER BY " + param.get("orderByDesc") + " DESC";
         }
         Object[] args = argsList.toArray();
         return (List<Product>) jdbcTemplate.query(query, MY_OBJECT_EXTRACTOR, args);

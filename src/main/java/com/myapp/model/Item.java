@@ -13,13 +13,13 @@ public class Item extends BaseEntity{
     private int	quantOrdered;
     private String	imageSource;
     private double	discount;
-    private boolean	isAvailable;
+    private boolean available;
 
     public Item() {
 
     }
 
-    public Item(int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean isAvailable) {
+    public Item(int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean available) {
         this.productId = productId;
         this.price = price;
         this.itemType = itemType;
@@ -29,10 +29,10 @@ public class Item extends BaseEntity{
         this.quantOrdered = quantOrdered;
         this.imageSource = imageSource;
         this.discount = discount;
-        this.isAvailable = isAvailable;
+        this.available = available;
     }
 
-    public Item(Integer id, int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean isAvailable) {
+    public Item(Integer id, int productId, BigDecimal price, String itemType, String itemSize, int currencyId, int quantity, int quantOrdered, String imageSource, double discount, boolean available) {
         super(id);
         this.productId = productId;
         this.price = price;
@@ -43,7 +43,7 @@ public class Item extends BaseEntity{
         this.quantOrdered = quantOrdered;
         this.imageSource = imageSource;
         this.discount = discount;
-        this.isAvailable = isAvailable;
+        this.available = available;
     }
 
     public int getProductId() {
@@ -118,12 +118,12 @@ public class Item extends BaseEntity{
         this.discount = discount;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public boolean getAvailable() {
+        return available;
     }
 
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        this.available = available;
     }
 
     @Override
@@ -137,7 +137,7 @@ public class Item extends BaseEntity{
                 quantity == item.quantity &&
                 quantOrdered == item.quantOrdered &&
                 Double.compare(item.discount, discount) == 0 &&
-                isAvailable == item.isAvailable &&
+                available == item.available &&
                 Objects.equals(price, item.price) &&
                 (Objects.equals(itemType, item.itemType) || (getItemType() == null && item.getItemType() == null)) &&
                 (Objects.equals(itemSize, item.itemSize) || (getItemSize() == null && item.getItemSize() == null))&&
@@ -146,6 +146,6 @@ public class Item extends BaseEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), productId, price, itemType, itemSize, currencyId, quantity, quantOrdered, imageSource, discount, isAvailable);
+        return Objects.hash(super.hashCode(), productId, price, itemType, itemSize, currencyId, quantity, quantOrdered, imageSource, discount, available);
     }
 }

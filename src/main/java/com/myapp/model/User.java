@@ -1,6 +1,5 @@
 package com.myapp.model;
 
-import com.myapp.customAnnotation.DateConstraint;
 import com.myapp.customAnnotation.EqualFields;
 import com.myapp.customAnnotation.PasswordConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +24,6 @@ public class User extends BaseEntity {
     private String address;
     private String phone;
 
- //   @DateConstraint
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 

@@ -3,7 +3,7 @@ package com.myapp.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class OrderDetail{
+public class OrderDetail {
     private int orderId;
     private int productId;
     private String productName;
@@ -11,20 +11,18 @@ public class OrderDetail{
     private int itemId;
     private String itemType;
     private String itemSize;
-    private int	quantity;
+    private int quantity;
     private BigDecimal price;
     private int currencyId;
-    private double discount;
     private String productImageSource;
-    private String itemImageSource;
 
     public OrderDetail() {
 
     }
 
     public OrderDetail(int orderId, int productId, String productName, String brandName, int itemId, String itemType,
-                       String itemSize, int quantity, BigDecimal price, int currencyId, double discount,
-                       String productImageSource, String itemImageSource) {
+                       String itemSize, int quantity, BigDecimal price, int currencyId,
+                       String productImageSource) {
         this.orderId = orderId;
         this.productId = productId;
         this.productName = productName;
@@ -35,9 +33,7 @@ public class OrderDetail{
         this.quantity = quantity;
         this.price = price;
         this.currencyId = currencyId;
-        this.discount = discount;
         this.productImageSource = productImageSource;
-        this.itemImageSource = itemImageSource;
     }
 
     public int getOrderId() {
@@ -120,28 +116,12 @@ public class OrderDetail{
         this.currencyId = currencyId;
     }
 
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
     public String getProductImageSource() {
         return productImageSource;
     }
 
     public void setProductImageSource(String productImageSource) {
         this.productImageSource = productImageSource;
-    }
-
-    public String getItemImageSource() {
-        return itemImageSource;
-    }
-
-    public void setItemImageSource(String itemImageSource) {
-        this.itemImageSource = itemImageSource;
     }
 
     @Override
@@ -154,18 +134,16 @@ public class OrderDetail{
                 itemId == that.itemId &&
                 quantity == that.quantity &&
                 currencyId == that.currencyId &&
-                Double.compare(that.discount, discount) == 0 &&
                 Objects.equals(productName, that.productName) &&
                 Objects.equals(brandName, that.brandName) &&
-                Objects.equals(itemType, that.itemType) &&
-                Objects.equals(itemSize, that.itemSize) &&
+                (Objects.equals(itemType, that.itemType) || (itemType == null && that.itemType == null)) &&
+                (Objects.equals(itemSize, that.itemSize) || (itemSize == null && that.itemSize == null)) &&
                 price.compareTo(that.price) == 0 &&
-                Objects.equals(productImageSource, that.productImageSource) &&
-                Objects.equals(itemImageSource, that.itemImageSource);
+                (Objects.equals(productImageSource, that.productImageSource) || (productImageSource == null && that.productImageSource == null));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, productId, productName, brandName, itemId, itemType, itemSize, quantity, price, currencyId, discount, productImageSource, itemImageSource);
+        return Objects.hash(orderId, productId, productName, brandName, itemId, itemType, itemSize, quantity, price, currencyId, productImageSource);
     }
 }
