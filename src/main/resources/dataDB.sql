@@ -8,7 +8,6 @@ Insert into USERS (NAME,EMAIL,PASSWORD,ROLE_ID,ADDRESS,PHONE,BIRTHDAY) values ('
 Insert into USERS (NAME,EMAIL,PASSWORD,ROLE_ID,ADDRESS,PHONE,BIRTHDAY) values ('Amy Star','amy@gmail.com','5Aa@',3,null,null,null);
 
 /*-----Brand-------*/
-Insert into BRAND (NAME,DESCRIPTION) values ('No Brand','No Brand');
 Insert into BRAND (NAME,DESCRIPTION) values ('Banna','Banna');
 Insert into BRAND (NAME,DESCRIPTION) values ('Isme','Isme');
 Insert into BRAND (NAME,DESCRIPTION) values ('Mistine','Mistine');
@@ -25,7 +24,6 @@ Insert into GROUPS (NAME,DESCRIPTION) values ('Bath&Body','Bath&Body');
 Insert into GROUPS (NAME,DESCRIPTION) values ('MakeUp','MakeUp');
 
 /*------Category----------*/
-Insert into CATEGORY (NAME,DESCRIPTION) values ('Bestsellers','Bestsellers');
 Insert into CATEGORY (NAME,DESCRIPTION) values ('Sale','Sale');
 Insert into CATEGORY (NAME,DESCRIPTION) values ('Masks','Masks');
 Insert into CATEGORY (NAME,DESCRIPTION) values ('Lip Treatments','Lip Treatments');

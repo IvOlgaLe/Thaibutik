@@ -16,7 +16,7 @@ public interface CartDetailDAOI {
                 "SELECT cd.cart_id AS cart_id, cd.quantity AS quantity, " +
                         "i.product_id AS product_id, i.id AS item_id, i.price AS price, i.currency_id AS currency_id, " +
                         "i.discount AS discount, i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.name AS product_name, i.image_source AS item_image_source, p.image_source AS product_image_source," +
+                        "p.name AS product_name, i.image_source AS item_image_source, p.image_source AS product_image_source, i.image_source AS item_image_source, " +
                         "b.name AS brand_name " +
                         "FROM cart_detail cd " +
                         "LEFT JOIN item i ON cd.item_id = i.id " +
@@ -27,7 +27,7 @@ public interface CartDetailDAOI {
                 "SELECT cd.cart_id AS cart_id, cd.quantity AS quantity, " +
                         "i.product_id AS product_id, i.id AS item_id, i.price AS price, i.currency_id AS currency_id, " +
                         "i.discount AS discount, i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.name AS product_name, i.image_source AS item_image_source, p.image_source AS product_image_source," +
+                        "p.name AS product_name, i.image_source AS item_image_source, p.image_source AS product_image_source, i.image_source AS item_image_source, " +
                         "b.name AS brand_name " +
                         "FROM cart_detail cd " +
                         "LEFT JOIN item i ON cd.item_id = i.id " +

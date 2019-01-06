@@ -22,6 +22,9 @@
                 <c:if test="${not empty exceptionList}">
                     <p>${exceptionList.get(0).getMessage()}</p>
                 </c:if>
+                <c:if test="${empty orderList}">
+                    <p>Your Order List is Empty</p>
+                </c:if>
                 <!-- BEGIN ORDER PAGE -->
                 <div class="panel-group order_page accordion scrollable" id="order_page">
                     <c:if test="${not empty orderList}">
@@ -55,9 +58,16 @@
                                                 <c:forEach var="orderDetail" items="${order.orderDetailList}">
                                                     <tr>
                                                         <td class="goods-page-image">
-                                                            <a href="${imgPrefix}/products/${orderDetail.productImageSource}"><img
-                                                                    src="${imgPrefix}/products/${orderDetail.productImageSource}"
-                                                                    alt="${orderDetail.productName}"></a>
+                                                            <c:if test="${not empty orderDetail.itemImageSource}">
+                                                                <a href="${imgPrefix}/products/${orderDetail.itemImageSource}"><img
+                                                                        src="${imgPrefix}/products/${orderDetail.itemImageSource}"
+                                                                        alt="${orderDetail.productName}"></a>
+                                                            </c:if>
+                                                            <c:if test="${empty orderDetail.itemImageSource}">
+                                                                <a href="${imgPrefix}/products/${orderDetail.productImageSource}"><img
+                                                                        src="${imgPrefix}/products/${orderDetail.productImageSource}"
+                                                                        alt="${orderDetail.productName}"></a>
+                                                            </c:if>
                                                         </td>
                                                         <td class="goods-page-description">
                                                             <h3>

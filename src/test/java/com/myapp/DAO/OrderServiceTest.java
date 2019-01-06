@@ -27,7 +27,7 @@ public class OrderServiceTest extends BaseTestClass {
         List<OrderDetail> orderDetailList = new ArrayList<>();
 
         Date date = format.parse( "2018-11-25" );
-        orderDetailList.add(new OrderDetail(0, 100001, "Soap", "Mary Key", 1000001, "Strawberry", "50 ml", 2, new BigDecimal(15.0), 11, ""));
+        orderDetailList.add(new OrderDetail(0, 100001, "Soap", "Mary Key", 1000001, "Strawberry", "50 ml", 2, new BigDecimal(15.0), 11, "", ""));
         Order orderExp = new Order(1001, date, new BigDecimal(30.0), 2, 11, date, "Delivery Info", orderState, "147 Main Street", orderDetailList);
         Order order = orderService.saveOrder(orderExp);
         int orderId = order.getId();
@@ -65,7 +65,7 @@ public class OrderServiceTest extends BaseTestClass {
         int productId = 100001;
         int itemId = 1000002;
         OrderDetail orderDetailExp = new OrderDetail(orderId, productId, "Soap", "Mary Key", itemId,
-                "Type02", "20 ml", 1, new BigDecimal(9.5), 11, "img01");
+                "Type02", "20 ml", 1, new BigDecimal(9.5), 11, "img01", "img06");
         orderService.saveOrderDetail(orderDetailExp);
 
         //-----getById-------

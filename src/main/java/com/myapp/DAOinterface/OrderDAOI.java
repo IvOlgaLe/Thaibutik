@@ -16,7 +16,7 @@ public interface OrderDAOI {
                         "o.delivery_address AS delivery_address, o.order_state_id AS order_state_id, os.name AS order_state_name, " +
                         "od.quantity AS quantity, od.price AS price, od.currency_id AS item_currency_id, " +
                         "i.product_id AS product_id, i.id AS item_id, i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.name AS product_name, p.image_source AS product_image_source," +
+                        "p.name AS product_name, p.image_source AS product_image_source, i.image_source AS item_image_source, " +
                         "b.name AS brand_name " +
                         "FROM orders o " +
                         "JOIN order_state os ON o.order_state_id = os.id " +
@@ -32,7 +32,7 @@ public interface OrderDAOI {
                         "o.delivery_address AS delivery_address, o.order_state_id AS order_state_id, os.name AS order_state_name, " +
                         "od.quantity AS quantity, od.price AS price, od.currency_id AS item_currency_id, " +
                         "i.product_id AS product_id, i.id AS item_id, i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.name AS product_name, p.image_source AS product_image_source, " +
+                        "p.name AS product_name, p.image_source AS product_image_source, i.image_source AS item_image_source, " +
                         "b.name AS brand_name " +
                         "FROM orders o " +
                         "JOIN order_state os ON o.order_state_id = os.id " +

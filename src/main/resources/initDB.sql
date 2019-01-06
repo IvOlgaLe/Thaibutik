@@ -164,7 +164,7 @@ INSERT INTO order_state (name)
 VALUES ('CANCELLED');
 
 INSERT INTO category (name, description)
-VALUES ('Bestseller', 'Bestseller');
+VALUES ('Bestsellers', 'Bestsellers');
 
 INSERT INTO brand (name, description)
 VALUES ('No Brand', 'No Brand');

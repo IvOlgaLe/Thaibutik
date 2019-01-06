@@ -36,41 +36,7 @@
                     </div>
                 </div>
                 <form action="${contextPath}/processSearch">
-                    <div class="row list-view-sorting clearfix">
-                        <div class="col-md-10 col-sm-10">
-                            <div class="pull-left">
-                                <label class="control-label">Show&nbsp;by&nbsp;price:</label>
-                                <div class="pull-left">
-                                    <input name="lowPrice" type="number" tabindex="1"/> -
-                                    <input name="highPrice" type="number" tabindex="2"/>
-                                </div>
-                            </div>
-                            <div class="pull-left">
-                                <label class="control-label">Sort&nbsp;By:</label>
-                                <select name="orderBy" class="form-control input-sm">
-                                    <option value="i.price*(1-i.discount/100)" selected="selected">Default</option>
-                                    <option value="p.name">Name (A - Z)</option>
-                                    <option value="p.name DESC">Name (Z - A)</option>
-                                    <option value="i.price*(1-i.discount/100)">Price (Low &gt; High)</option>
-                                    <option value="i.price*(1-i.discount/100) DESC">Price (High &gt; Low)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-10 col-sm-10">
-                            <div class="pull-left">
-                                <label class="control-label">Type:</label>
-                                <input name="itemType" type="text" tabindex="3"/>
-                            </div>
-                            <div class="pull-left">
-                                <label class="control-label">Size:</label>
-                                <input name="itemSize" type="text" tabindex="4"/>
-                            </div>
-                            <div class="pull-left">
-                                <input name="name" type="hidden" value="${searchWord}"/>
-                                <button class="btn btn-primary" type="submit">Apply</button>
-                            </div>
-                        </div>
-                    </div>
+                    <%@include file="search_panel.jsp" %>
                 </form>
             </div>
 
@@ -81,7 +47,7 @@
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <div class="product-item">
                             <div class="pi-img-wrapper">
-                                <img src="${imgPrefix}${product.imageSource}" class="img-responsive"
+                                <img src="${imgPrefix}/products/${product.imageSource}" class="img-responsive"
                                      alt="${product.name}">
                             </div>
                             <h3>

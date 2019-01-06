@@ -15,6 +15,7 @@ public class OrderDetail {
     private BigDecimal price;
     private int currencyId;
     private String productImageSource;
+    private String itemImageSource;
 
     public OrderDetail() {
 
@@ -22,7 +23,7 @@ public class OrderDetail {
 
     public OrderDetail(int orderId, int productId, String productName, String brandName, int itemId, String itemType,
                        String itemSize, int quantity, BigDecimal price, int currencyId,
-                       String productImageSource) {
+                       String productImageSource, String itemImageSource) {
         this.orderId = orderId;
         this.productId = productId;
         this.productName = productName;
@@ -34,6 +35,7 @@ public class OrderDetail {
         this.price = price;
         this.currencyId = currencyId;
         this.productImageSource = productImageSource;
+        this.itemImageSource = itemImageSource;
     }
 
     public int getOrderId() {
@@ -124,6 +126,14 @@ public class OrderDetail {
         this.productImageSource = productImageSource;
     }
 
+    public String getItemImageSource() {
+        return itemImageSource;
+    }
+
+    public void setItemImageSource(String itemImageSource) {
+        this.itemImageSource = itemImageSource;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,11 +149,13 @@ public class OrderDetail {
                 (Objects.equals(itemType, that.itemType) || (itemType == null && that.itemType == null)) &&
                 (Objects.equals(itemSize, that.itemSize) || (itemSize == null && that.itemSize == null)) &&
                 price.compareTo(that.price) == 0 &&
-                (Objects.equals(productImageSource, that.productImageSource) || (productImageSource == null && that.productImageSource == null));
+                (Objects.equals(productImageSource, that.productImageSource) || (productImageSource == null && that.productImageSource == null)) &&
+                (Objects.equals(itemImageSource, that.itemImageSource) || (itemImageSource == null && that.itemImageSource == null));
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, productId, productName, brandName, itemId, itemType, itemSize, quantity, price, currencyId, productImageSource);
+        return Objects.hash(orderId, productId, productName, brandName, itemId, itemType, itemSize, quantity, price, currencyId, productImageSource, itemImageSource);
     }
 }

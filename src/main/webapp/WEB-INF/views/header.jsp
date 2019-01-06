@@ -51,9 +51,12 @@
                     <ul class="scroller" style="height: 250px;">
                         <c:forEach var="cartDetail" items="${cart.cartDetailList}">
                             <li>
-                                <a href="${imgPrefix}${cartDetail.productImageSource}"><img src="${imgPrefix}${cartDetail.productImageSource}" alt="${cartDetail.productName}" width="60" height="34"></a>
+                                <a href="${imgPrefix}/products/${cartDetail.productImageSource}">
+                                    <img src="${imgPrefix}/products/${cartDetail.productImageSource}"
+                                         alt="${cartDetail.productName}" width="60" height="34"></a>
                                 <span class="cart-content-count">x ${cartDetail.quantity}</span>
-                                <strong><a href="${contextPath}/product/0/${cartDetail.productId}/${cartDetail.itemId}">${cartDetail.productName}</a></strong>
+                                <strong><a href="${contextPath}/product/0/${cartDetail.productId}/${cartDetail.itemId}">
+                                        ${cartDetail.productName}</a></strong>
                                 <strong><span>$<fmt:formatNumber type="number" maxFractionDigits="2"
                                                                         value="${cartDetail.price*(1-cartDetail.discount/100)}"/></span></strong>
                                 <a href="${contextPath}/deleteItemFromCart/${cartDetail.itemId}" class="del-goods">&nbsp;</a>

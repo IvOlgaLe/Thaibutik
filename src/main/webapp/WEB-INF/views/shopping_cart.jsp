@@ -42,9 +42,16 @@
                                             <input name="itemId" type="hidden" value="${cartDetail.itemId}">
                                             <tr>
                                                 <td class="goods-page-image">
+                                                    <c:if test="${not empty cartDetail.itemImageSource}">
+                                                        <a href="${imgPrefix}/products/${cartDetail.itemImageSource}"><img
+                                                                src="${imgPrefix}/products/${cartDetail.itemImageSource}"
+                                                                alt="${cartDetail.productName}"></a>
+                                                    </c:if>
+                                                    <c:if test="${empty cartDetail.itemImageSource}">
                                                     <a href="${imgPrefix}/products/${cartDetail.productImageSource}"><img
-                                                            src="${imgPrefix}${cartDetail.productImageSource}"
+                                                            src="${imgPrefix}/products/${cartDetail.productImageSource}"
                                                             alt="${cartDetail.productName}"></a>
+                                                    </c:if>
                                                 </td>
                                                 <td class="goods-page-description">
                                                     <h3>

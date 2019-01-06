@@ -1,6 +1,7 @@
 package com.myapp.service;
 
 import com.myapp.DAO.*;
+import com.myapp.exception.NotAvailableItemException;
 import com.myapp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -148,11 +149,25 @@ public class ProductService {
         return deleteProductById(productId);
     }
 
-    public void updateItemsQuantity(Map<Integer, Integer> map) {
-        for (Map.Entry<Integer, Integer> pair : map.entrySet()) {
-            Item item = getItemById(pair.getKey());
-            item.setQuantity(item.getQuantity() - pair.getValue());
-
+    public Item getItemUpdatedQuantity(int itemId, int quantity, List<Exception> exceptionList) {
+        Item item = getItemById(itemId);
+        if (item.getAvailable()) {
+            if (item.getQuantity() >= quantity) {
+                int newQuantity = item.getQuantity() - quantity;
+                item.setQuantity(newQuantity);
+                item.setQuantOrdered(item.getQuantOrdered() + quantity);
+                //if item is sold out set "is not available"
+                if(newQuantity < 1) {
+                    item.setAvailable(false);
+                }
+                return item;
+            } else {
+                exceptionList.add(new NotAvailableItemException("Unfortunately, there are " + item.getQuantity() + " items in stock"));
+                return null;
+            }
+        } else {
+            exceptionList.add(new NotAvailableItemException("Unfortunately, this product is not available"));
+            return null;
         }
     }
 

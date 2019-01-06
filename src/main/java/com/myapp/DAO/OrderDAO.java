@@ -86,6 +86,7 @@ public class OrderDAO extends BaseDAO implements OrderDAOI {
                 orderDetail.setPrice(rs.getBigDecimal("price"));
                 orderDetail.setCurrencyId(rs.getInt("item_currency_id"));
                 orderDetail.setProductImageSource(rs.getString("product_image_source"));
+                orderDetail.setItemImageSource(rs.getString("item_image_source"));
                 orderDetailList.add(orderDetail);
                 order.setOrderDetailList(orderDetailList);
             }

@@ -214,21 +214,4 @@ public class CartService {
             return 0;
         }
     }
-
-    public Item getItemUpdatedQuantity(int itemId, int quantity, List<Exception> exceptionList) {
-        Item item = productService.getItemById(itemId);
-        if (item.getAvailable()) {
-            if (item.getQuantity() >= quantity) {
-                item.setQuantity(item.getQuantity() - quantity);
-                item.setQuantOrdered(item.getQuantOrdered() + quantity);
-                return item;
-            } else {
-                exceptionList.add(new NotAvailableItemException("Unfortunately, there are " + item.getQuantity() + " items in stock"));
-                return null;
-            }
-        } else {
-            exceptionList.add(new NotAvailableItemException("Unfortunately, this product is not available"));
-            return null;
-        }
-    }
 }

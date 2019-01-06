@@ -17,7 +17,7 @@ public interface OrderDetailDAOI {
                         "i.product_id AS product_id, p.name AS product_name, b.name AS brand_name, " +
                         "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, " +
                         "i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.image_source AS product_image_source " +
+                        "p.image_source AS product_image_source, i.image_source AS item_image_source " +
                         "FROM order_detail od " +
                         "JOIN item i ON od.item_id = i.id " +
                         "JOIN product p ON i.product_id = p.id " +
@@ -28,7 +28,7 @@ public interface OrderDetailDAOI {
                         "i.product_id AS product_id, p.name AS product_name, b.name AS brand_name, " +
                         "od.quantity AS quantity, od.price AS price, od.currency_id AS currency_id, " +
                         "i.item_type AS item_type, i.item_size AS item_size, " +
-                        "p.image_source AS product_image_source " +
+                        "p.image_source AS product_image_source, i.image_source AS item_image_source  " +
                         "FROM order_detail od " +
                         "JOIN item i ON od.item_id = i.id " +
                         "JOIN product p ON i.product_id = p.id " +

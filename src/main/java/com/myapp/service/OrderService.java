@@ -121,7 +121,7 @@ public class OrderService {
         Order order = new Order();
         order.setUserId(((User) session.getAttribute("sessUser")).getId());
         order.setOrderDate(new Date());
-        order.setOrderState(orderStateDAO.getOrderStateByName(Constants.PROCESSING));
+        order.setOrderState(getOrderStateByName(Constants.PROCESSING));
         order.setDeliveryInfo(request.getParameter("deliveryInfo"));
         order.setDeliveryInfo(request.getParameter("deliveryAddress"));
 
@@ -139,7 +139,7 @@ public class OrderService {
             int quantity = cartDetail.getQuantity();
 
             //check item availability and calculate quantity
-            Item item = cartService.getItemUpdatedQuantity(itemId, quantity, exceptionList);
+            Item item = productService.getItemUpdatedQuantity(itemId, quantity, exceptionList);
             if (item == null) {
                 break;
             } else {
