@@ -107,7 +107,7 @@
                 <!-- BEGIN TOP SEARCH -->
                 <li class="menu-search">
                     <span class="sep"></span>
-                    <i class="fa fa-search search-btn"></i>
+                    <i class="fa fa-search search-btn">Search</i>
                     <div class="search-box">
                         <form action="${contextPath}/processSearch">
                             <div class="input-group">

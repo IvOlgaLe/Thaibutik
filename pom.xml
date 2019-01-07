@@ -50,20 +50,7 @@
         <junit.version>4.12</junit.version>
     </properties>
 
-    <!--<parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
-    </parent>
--->
-
     <dependencies>
-
-     <!--   <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
--->
         <!-- Logging with SLF4J & LogBack -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -122,6 +109,13 @@
         </dependency>
 
         <!--DataBase-->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.13</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.github.noraui/ojdbc8 -->
         <dependency>
             <groupId>com.github.noraui</groupId>

@@ -1048,7 +1048,7 @@ steps block and steps block elements
 	display: block;
 	width: 36px;
 	height: 71px;
-	background: url(../../images/icons/step3-angle-right.png) no-repeat 100% 50%;
+	background: url(../images/icons/step3-angle-right.png) no-repeat 100% 50%;
 	position: absolute;
 	top: 0;
 	right: 10px;
@@ -2223,7 +2223,7 @@ Demo Utils
   position: absolute;
   right: 0;
   bottom: 0;
-  background: #E6400C url(../img/blockquote-corner.png) no-repeat;
+  background: #E6400C url(../images/icons/blockquote-corner.png) no-repeat;
 }
 
 .testimonials-v1 .carousel-info img {
@@ -2980,14 +2980,14 @@ Styler Panel
   margin: 0;
 }
 .color-panel .icon-color {
-  background: #c9c9c9 url(../../pages/img/icon-color.png) center no-repeat;
+  background: #c9c9c9 url(../images/icons/icon-color.png) center no-repeat;
 }
 .color-panel .icon-color:hover {
   background-color: #3d3d3d;
 }
 .color-panel .icon-color-close {
   display: none;
-  background: #3d3d3d url(../../pages/img/icon-color-close.png) center no-repeat;
+  background: #3d3d3d url(../images/icons/icon-color-close.png) center no-repeat;
 }
 .color-panel .icon-color-close:hover {
   background-color: #222;
