@@ -19,10 +19,8 @@
             <div class="col-md-9 col-sm-7">
                 <h1>Hi, ${sessUser.name}</h1>
                 <div class="content-page">
-                    <h3>My Account</h3>
+                    <h3>Administration menu</h3>
                     <ul>
-                        <li><a href="${contextPath}/profileForm">Edit My Account Information</a></li>
-                        <li><a href="${contextPath}/profilePassword">Change My Password</a></li>
                         <li><a href="${contextPath}/productTable">Products Table</a></li>
                         <li><a href="${contextPath}/editProduct/0">Add Product</a></li>
                         <li><a href="${contextPath}/orderTable">Orders Table</a></li>

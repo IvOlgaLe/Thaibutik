@@ -76,4 +76,8 @@ public class MainController extends BaseController {
         return new ModelAndView("contact_us");
     }
 
+    @RequestMapping(value = "faq", method = RequestMethod.GET)
+    public ModelAndView faqPage() {
+        return new ModelAndView("faq");
+    }
 }

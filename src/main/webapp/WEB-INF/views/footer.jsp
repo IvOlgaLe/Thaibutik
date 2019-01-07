@@ -51,6 +51,8 @@
                 <h2>Information</h2>
                 <ul class="list-unstyled">
                     <li><i class="fa fa-angle-right"></i> <a href="${contextPath}/contactUs">Contact Us</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="${contextPath}/faq">FAQ</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="${contextPath}/termsConditions">Terms&Conditions</a></li>
                 </ul>
             </div>
             <!-- END INFO BLOCK -->
