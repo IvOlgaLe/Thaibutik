@@ -30,7 +30,7 @@ public class UserController extends BaseController {
     @Autowired
     CartService cartService;
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "login")
     public ModelAndView login(@ModelAttribute("user") User user) {
         return new ModelAndView("login");
     }
@@ -45,8 +45,8 @@ public class UserController extends BaseController {
         return "redirect:/";
     }
 
-    @RequestMapping("processLogin")
-    public String processLogin(@ModelAttribute("user") User user, HttpServletRequest request, RedirectAttributes redir) {
+    @RequestMapping(value = "processLogin", method = RequestMethod.POST)
+    public ModelAndView processLogin(@ModelAttribute("user") User user, HttpServletRequest request) {
         List<Exception> exceptionList = new ArrayList<>();
         HttpSession session = request.getSession();
         String email = request.getParameter("email");
@@ -54,41 +54,38 @@ public class UserController extends BaseController {
 
         user = userService.validateUser(email, password);
         if (user != null) {
-            if(userService.checkAdminPrivilege(user)) {
+            if (userService.checkAdminPrivilege(user)) {
                 session.setAttribute("adminFlag", true);
             }
             session.setAttribute("sessUser", user);
             session.setAttribute("cart", cartService.mergeLoginUserCarts(session, exceptionList));
         } else {
-            redir.addFlashAttribute("errorLoginMessage", "Wrong credentials");
-            redir.addFlashAttribute("email", email);
-            return "redirect:/login";
+            request.setAttribute("errorLoginMessage", "Wrong credentials");
+            request.setAttribute("email", email);
+            return new ModelAndView("login");
         }
-        return "redirect:/index";
+        return new ModelAndView("my_account");
     }
 
     @Transactional
     @RequestMapping(value = "processRegister", method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute("user") @Valid User user, BindingResult result, HttpServletRequest request) {
+    public ModelAndView processRegister(@ModelAttribute("user") @Valid User user, BindingResult result, HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (!result.hasErrors()) {
             //if user is registered with that email
             if (userService.getUserByEmail(user.getEmail()) != null) {
                 request.setAttribute("errorRegisterMessage", "User with email " + user.getEmail() + " is registered");
                 request.setAttribute("email", user.getEmail());
-                return "forward:/login";
+                return new ModelAndView("login");
             }
-           // int roleId = cacheManager.getEnumIdByName(MemoryCache.ROLE.getName(), Constants.ROLE_USER);
+            // int roleId = cacheManager.getEnumIdByName(MemoryCache.ROLE.getName(), Constants.ROLE_USER);
             int roleId = userService.getRoleByName(Constants.ROLE_USER).getId();
-            if (roleId != 0) {
-                user.setRoleId(roleId);
-                userService.saveUser(user);
-                session.setAttribute("sessUser", user);
-                return "redirect:/index";
-            }
-            return "redirect:/index";
+            user.setRoleId(roleId);
+            userService.saveUser(user);
+            session.setAttribute("sessUser", user);
+            return new ModelAndView("my_account");
         } else {
-            return "forward:/login";
+            return new ModelAndView("login");
         }
     }
 
