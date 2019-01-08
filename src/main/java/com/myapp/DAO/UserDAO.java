@@ -46,7 +46,7 @@ public class UserDAO extends BaseDAO implements UserDAOI {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
-                .addValue("email", user.getEmail())
+                .addValue("email", user.getEmail().toLowerCase())
                 .addValue("password", user.getPassword())
                 .addValue("role_id", user.getRoleId())
                 .addValue("address", user.getAddress())

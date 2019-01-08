@@ -73,7 +73,7 @@ public class UserController extends BaseController {
         HttpSession session = request.getSession();
         if (!result.hasErrors()) {
             //if user is registered with that email
-            if (userService.getUserByEmail(user.getEmail()) != null) {
+            if (userService.getUserByEmail(user.getEmail().toLowerCase()) != null) {
                 request.setAttribute("errorRegisterMessage", "User with email " + user.getEmail() + " is registered");
                 request.setAttribute("email", user.getEmail());
                 return new ModelAndView("login");
